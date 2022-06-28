@@ -2,25 +2,29 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PipeInsulationPlugin"
+             xmlns:uc="clr-namespace:PipeInsulationPlugin.Views.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="1400">
+             d:DesignHeight="900" d:DesignWidth="1400">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="800"/>
             <ColumnDefinition Width="600"/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="PipesListView" Margin="30">
+
+        <ListView x:Name="PipesListView" Margin="30" Grid.Row="0">
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn Header="Pipe" DisplayMemberBinding="{Binding PipeName}"/>
-                        <GridViewColumn Header="SizeString" DisplayMemberBinding="{Binding PipeNominalSizeString}"/>
+                        <GridViewColumn Header="Pipe Type" DisplayMemberBinding="{Binding PipeName}"/>
+                        <GridViewColumn Header="Size As String" DisplayMemberBinding="{Binding PipeNominalSizeString}"/>
                         <GridViewColumn Header="Size" DisplayMemberBinding="{Binding PipeNominalSize}"/>
-                        <GridViewColumn Header="System" DisplayMemberBinding="{Binding SystemClassification}"/>
+                        <GridViewColumn Header="System Classification" DisplayMemberBinding="{Binding SystemClassification}"/>
+                        <GridViewColumn Header="System Type" DisplayMemberBinding="{Binding SystemType}"/>
                         <GridViewColumn Header="Insulation Type" DisplayMemberBinding="{Binding InsulationType}"/>
                         <GridViewColumn Header="Insulation Thickness" DisplayMemberBinding="{Binding InsulationThickness}"/>
+                        <GridViewColumn Header="Comments" DisplayMemberBinding="{Binding Comments}"/>
                         <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}"/>
 
                     </GridView.Columns>
@@ -28,16 +32,90 @@
             </ListView.View>
         </ListView>
 
-        <StackPanel Grid.Column="1">
+        <Grid x:Name="MainSortingAndFilterinGrid" 
+              Grid.Column="1"
+              Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="130"/>
+                <RowDefinition Height="220"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <SolidColorBrush x:Key="brush" Color="LightGray"/>
+            </Grid.Resources>
+
+            <Grid Name="SortingGrid" Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="SORTING" FontWeight="Heavy"
+                       Grid.Row="0" Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Margin="25,4,4,4"/>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Label Content="Sort by primary key" 
+                           Margin="25,5,0,2"/>
+                    <ComboBox Name="SortByPrimaryKeyComboBox"
+                              SelectedIndex="3" 
+                              Width="250" 
+                              HorizontalAlignment="Left"
+                              Margin="25,0,0,0"/>
+                </StackPanel>
+                <Button x:Name="SortBtn"
+                            Content="Apply sorting"
+                            Click="SortBtn_Click"
+                            Grid.Row="2"
+                            Width="150"
+                            Height="20"
+                            Margin="25,3,0,0"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"/>
+                <StackPanel Grid.Column="1" Grid.Row="1">
+                    <Label Content="Sort by secondary key" 
+                           Margin="15,5,0,2"/>
+                    <ComboBox Name="SortBySecondaryKeyComboBox" 
+                          SelectedIndex="1" 
+                          Width="250" 
+                          HorizontalAlignment="Left"
+                          Margin="15,0,0,0"/>
+                </StackPanel>
+
+                <Border Grid.Column="0" Grid.Row="0" 
+                        BorderBrush="{StaticResource brush}" BorderThickness="1,1,0,0"/>
+                <Border Grid.Column="1" Grid.Row="0" 
+                        BorderBrush="{StaticResource brush}" BorderThickness="0,1,1,0"/>
+                <Border Grid.Column="0" Grid.Row="1" 
+                        BorderBrush="{StaticResource brush}" BorderThickness="1,0,0,0"/>
+                <Border Grid.Column="1" Grid.Row="1" 
+                        BorderBrush="{StaticResource brush}" BorderThickness="0,0,1,0"/>
+                <Border Grid.Column="0" Grid.Row="2" 
+                        BorderBrush="{StaticResource brush}" BorderThickness="1,0,0,1"/>
+                <Border Grid.Column="1" Grid.Row="2" 
+                        BorderBrush="{StaticResource brush}" BorderThickness="0,0,1,1"/>
+            </Grid>
+
+            <uc:FilterUserControl Grid.Row="1"
+                                  Grid.Column="0" VerticalAlignment="Top" Margin="0,2,0,0"></uc:FilterUserControl>
+
+
+
+
             <Button x:Name="AddInsulationBtn"
                 Content="Add Insulation"
                 Click="AddInsulation_Click"
-                Grid.Column="1"
-                Width="200"
-                Height="50"
+                Grid.Column="0" Grid.Row="3"
+                Width="150"
+                Height="30"
                 Margin="10"
-                VerticalAlignment="Top"
+                VerticalAlignment="Bottom"
                 HorizontalAlignment="Left" />
-        </StackPanel>
+        </Grid>
     </Grid>
 </Window>
