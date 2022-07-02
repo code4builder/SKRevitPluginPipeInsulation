@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Autodesk.Revit.DB;
 using PipeInsulationPlugin.Views.UserControls;
+using PipeInsulationPlugin.Models;
 
 namespace PipeInsulationPlugin.Views
 {
@@ -25,89 +26,37 @@ namespace PipeInsulationPlugin.Views
     public partial class UserWindowPipes : Window
     {
         List<PipeModel> pipesWithParams;
+        List<PipeModel> allFilteredPipes;
         List<InsulationModel> insulationWithParameters;
         Document doc;
 
-        public UserWindowPipes(Document document, List<PipeModel> pipes, List<InsulationModel> insulations)
+        public UserWindowPipes(Document document, List<PipeModel> pipes, List<InsulationModel> insulations, List<PipeModel> filteredPipes)
         {
             InitializeComponent();
 
             doc = document;
             pipesWithParams = pipes;
             PipesListView.ItemsSource = pipesWithParams;
+            allFilteredPipes = filteredPipes;
+            insulationWithParameters = insulations;
 
             string[] SortingComboBoxArray = { "Pipe Type", "Size", "System Classification", "System Type", "Insulation Type", "Insulation Thickness", "Comments" };
 
-            AddToCombo(SortingComboBoxArray, SortByPrimaryKeyComboBox);
-            AddToCombo(SortingComboBoxArray, SortBySecondaryKeyComboBox);
+            HelperFunctionalClass.AddToCombo(SortingComboBoxArray, SortByPrimaryKeyComboBox);
+            HelperFunctionalClass.AddToCombo(SortingComboBoxArray, SortBySecondaryKeyComboBox);
 
             PipesListView.Items.SortDescriptions.Add(new SortDescription("SystemType", ListSortDirection.Ascending));
             PipesListView.Items.SortDescriptions.Add(new SortDescription("PipeNominalSize", ListSortDirection.Ascending));
             SortBtn.Click += SortBtn_Click;
 
-            FilterUserControl filter1 = new FilterUserControl();
+            string[] FilteringComboBoxArray = { "Pipe Type", "System Classification", "System Type", "Insulation Type", "Comment" };
+            HelperFunctionalClass.AddToCombo(FilteringComboBoxArray, Filter1ComboBox);
 
-            string propertyForFilteringString = ConvertComboboxItemToProperty(filter1.Filter1ComboBox.SelectedItem.ToString());
-            //PipesListView.Items.Filter = PipeTypeFilter(filter1);
+            
 
-            TextBox texBoxForFiltering = filter1.TextBoxForFilter;
-
-            Type type = typeof(PipeModel);
-            PropertyInfo propertyForFiltering = type.GetProperty(propertyForFilteringString);
-            ListView pipesFilteredListView = new ListView();
-            pipesFilteredListView = PipesListView;
-
-            //pipesFilteredListView.Items.Filter = PipeTypeFilter;
-
-
-            insulationWithParameters = insulations;
-
-
-            //PipeInsulationListWindow pipeInsulationListWindow = new PipeInsulationListWindow(insulationWithParameters);
-            //InsulationListView.ItemsSource = insulationWithParameters;
         }
 
-        //private bool PipeTypeFilter(object obj)
-        //{
-        //    var Filterobj = obj as PipeModel;
-        //    return Filterobj.PipeName.Contains(texBoxForFiltering.Text, StringComparison.OrdinalIgnoreCase);
-        //}
 
-        //private bool PipeTypeFilter(object obj, FilterUserControl filter)
-        //{
-        //    var FilterObj = obj as PipeModel;
-        //    return FilterObj.PipeName.Contains(TextBoxForFilter);
-        //}
-
-        //private PropertyInfo PropertyInfoByName(string name)
-        //{
-        //    Type type = this.GetType();
-        //    PropertyInfo info = type.GetProperty(name);
-        //    if (info == null)
-        //        throw new Exception(String.Format(
-        //          "A property called {0} can't be accessed for type {1}.",
-        //          name, type.FullName));
-        //    return info;
-        //}
-
-        public static string ConvertComboboxItemToProperty(string selectedItem)
-        {
-            string propertyForSorting = "";
-            if (selectedItem == "Pipe Type")
-                propertyForSorting = "PipeName";
-            else if (selectedItem == "Size")
-                propertyForSorting = "PipeNominalSize";
-            else if (selectedItem == "System Classification")
-                propertyForSorting = "SystemClassification";
-            else if (selectedItem == "System Type")
-                propertyForSorting = "SystemType";
-            else if (selectedItem == "Insulation Type")
-                propertyForSorting = "InsulationType";
-            else if (selectedItem == "Comments")
-                propertyForSorting = "Comments";
-            else propertyForSorting = "InsulationThickness";
-            return propertyForSorting;
-        }
 
         public void SortList()
         {
@@ -115,28 +64,90 @@ namespace PipeInsulationPlugin.Views
             string primaryPropertyForSorting = "SystemType";
             string secondaryPropertyForSorting = "PipeNominalSize";
 
-            primaryPropertyForSorting = ConvertComboboxItemToProperty(SortByPrimaryKeyComboBox.SelectedItem.ToString());
-            secondaryPropertyForSorting = ConvertComboboxItemToProperty(SortBySecondaryKeyComboBox.SelectedItem.ToString());
+            primaryPropertyForSorting = HelperFunctionalClass.ConvertComboboxItemToProperty(SortByPrimaryKeyComboBox.SelectedItem.ToString());
+            secondaryPropertyForSorting = HelperFunctionalClass.ConvertComboboxItemToProperty(SortBySecondaryKeyComboBox.SelectedItem.ToString());
 
             PipesListView.Items.SortDescriptions[0] = new SortDescription(primaryPropertyForSorting, ListSortDirection.Ascending);
             PipesListView.Items.SortDescriptions[1] = new SortDescription(secondaryPropertyForSorting, ListSortDirection.Ascending);
         }
+
 
         private void SortBtn_Click(object sender, RoutedEventArgs e)
         {
             SortList();
         }
 
-        public static void AddToCombo(Array array, ComboBox comboBox)
+        public Predicate<object> GetFilter()
         {
-            foreach (var item in array)
+            if (Filter1ComboBox.Text == "Pipe Type")
+                return PipeTypeFilter;
+            else if (Filter1ComboBox.Text == "System Classification")
+                return SystemClassificationFilter;
+            else if (Filter1ComboBox.Text == "System Type")
+                return SystemTypeFilter;
+            else if (Filter1ComboBox.Text == "Insulation Type")
+                return InsulationTypeFilter;
+            else
+                return CommentsFilter;
+        }
+
+        private bool PipeTypeFilter(object obj)
+        {
+            var Filterobj = obj as PipeModel;
+            return Filterobj.PipeName.Contains(TextBoxForFilter.Text.ToString());
+        }
+
+        private bool SystemClassificationFilter(object obj)
+        {
+            var Filterobj = obj as PipeModel;
+            return Filterobj.SystemClassification.Contains(TextBoxForFilter.Text.ToString());
+        }
+
+        private bool SystemTypeFilter(object obj)
+        {
+            var Filterobj = obj as PipeModel;
+            return Filterobj.SystemType.Contains(TextBoxForFilter.Text.ToString());
+        }
+        private bool InsulationTypeFilter(object obj)
+        {
+            var Filterobj = obj as PipeModel;
+            return Filterobj.InsulationType.Contains(TextBoxForFilter.Text.ToString());
+        }
+        private bool CommentsFilter(object obj)
+        {
+            var Filterobj = obj as PipeModel;
+            return Filterobj.Comments.Contains(TextBoxForFilter.Text.ToString());
+        }
+
+
+
+        private void FilterApplyBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (TextBoxForFilter.Text == null)
             {
-                comboBox.Items.Add(item);
+                PipesListView.Items.Filter = null;
+            }
+            else
+            {
+                PipesListView.Items.Filter = GetFilter();
             }
         }
+
+
+
+
+
+
+
         private void AddInsulation_Click(object sender, RoutedEventArgs e)
         {
             InsulationModel.CreatePipeInsulation(doc);
+        }
+
+        private void BatchAddingInsulationBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AddInsulationView addInsulationView = new AddInsulationView(pipesWithParams, allFilteredPipes, insulationWithParameters, doc);
+            addInsulationView.Show();
         }
     }
 }

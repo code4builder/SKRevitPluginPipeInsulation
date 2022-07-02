@@ -23,8 +23,14 @@ namespace PipeInsulationPlugin
 
             List<PipeModel> pipesWithParameters = HelperFunctionalClass.GetAllParametersToLists(doc).Item1;
             List<InsulationModel> insulationWithParameters = HelperFunctionalClass.GetAllParametersToLists(doc).Item2;
+            List<PipeModel> filteredPipes = new List<PipeModel>();
+            List<Element> insulationTypes = HelperFunctionalClass.GetInsulationTypes(doc);
 
-            UserWindowPipes userWindowPipes = new UserWindowPipes(doc, pipesWithParameters, insulationWithParameters);
+            //List<string> insulationTypesNames = HelperFunctionalClass.GetInsulationTypeNames(doc);
+
+
+
+            UserWindowPipes userWindowPipes = new UserWindowPipes(doc, pipesWithParameters, insulationWithParameters, filteredPipes);
 
             userWindowPipes.ShowDialog();
 

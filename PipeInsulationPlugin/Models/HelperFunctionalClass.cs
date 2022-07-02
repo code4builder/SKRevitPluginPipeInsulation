@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.Attributes;
+using System.Windows.Controls;
+using Autodesk.Revit.DB.Plumbing;
 
 namespace PipeInsulationPlugin
 {
-    public static class HelperFunctionalClass
+    public class HelperFunctionalClass
     {
         public static Tuple<List<PipeModel>, List<InsulationModel>> GetAllParametersToLists(Document doc)
         {
@@ -40,6 +42,28 @@ namespace PipeInsulationPlugin
 
         }
 
+        public static List<Element> GetInsulationTypes(Document doc)
+        {
+            FilteredElementCollector allElementsCollectorInsulationTypes = new FilteredElementCollector(doc);
+
+            List<Element> allInsulationTypes = allElementsCollectorInsulationTypes.OfCategory(BuiltInCategory.OST_PipeInsulations).WhereElementIsElementType().ToList();
+
+            return allInsulationTypes;
+        }
+
+        public static List<string> GetInsulationTypeNames(Document doc)
+        {
+            List<Element> allInsulationTypes = GetInsulationTypes(doc);
+
+            List<string> insulationTypeNames = new List<string>();
+            foreach (Element element in allInsulationTypes)
+            {
+                string insulationTypeName = element.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM).AsString();
+                insulationTypeNames.Add(insulationTypeName);
+            }
+            return insulationTypeNames;
+        }
+
         public static void GetPipeParameters(List<Element> allPipes, List<PipeModel> pipesWithParameters)
         {
             foreach (Element element in allPipes)
@@ -61,6 +85,63 @@ namespace PipeInsulationPlugin
             {
                 ElementId id = element.Id;
                 insulationsWithParameters.Add(new InsulationModel(element, id, element.Name));
+            }
+        }
+
+        public static void AddToCombo(Array array, ComboBox comboBox)
+        {
+            foreach (var item in array)
+            {
+                comboBox.Items.Add(item);
+            }
+        }
+
+        public static string ConvertComboboxItemToProperty(string selectedItem)
+        {
+            string propertyForSorting = "";
+            if (selectedItem == "Pipe Type")
+                propertyForSorting = "PipeName";
+            else if (selectedItem == "Size")
+                propertyForSorting = "PipeNominalSize";
+            else if (selectedItem == "System Classification")
+                propertyForSorting = "SystemClassification";
+            else if (selectedItem == "System Type")
+                propertyForSorting = "SystemType";
+            else if (selectedItem == "Insulation Type")
+                propertyForSorting = "InsulationType";
+            else if (selectedItem == "Comments")
+                propertyForSorting = "Comments";
+            else propertyForSorting = "InsulationThickness";
+            return propertyForSorting;
+        }
+
+        public static void DeleteInsulationForFilteredPipes(Document doc, List<PipeModel> FilteredPipes)
+        {
+            using (Transaction t = new Transaction(doc))
+            {
+                t.Start("Delete Insulation");
+
+                FilteredElementCollector allElementsCollectorForInsulation = new FilteredElementCollector(doc);
+
+                List<Element> allPipeInsulationElements = allElementsCollectorForInsulation.OfCategory(BuiltInCategory.OST_PipeInsulations).WhereElementIsNotElementType().ToList();
+
+                List<PipeInsulation> allPipeInsulation = new List<PipeInsulation>();
+
+                foreach (var item in allPipeInsulationElements)
+                {
+                    allPipeInsulation.Add(item as PipeInsulation);
+                }
+
+                List<ElementId> InsulationIdToBeDeleted = (from PipeInsulation in allPipeInsulation
+                                                           join PipeModel in FilteredPipes on PipeInsulation.HostElementId equals PipeModel.Id
+                                                           select PipeInsulation.Id).ToList();
+
+                foreach (var item in InsulationIdToBeDeleted)
+                {
+                    doc.Delete(item);
+                }
+
+                t.Commit();
             }
         }
     }
