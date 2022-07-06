@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Plumbing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.Attributes;
 using System.Windows.Controls;
-using Autodesk.Revit.DB.Plumbing;
 
 namespace PipeInsulationPlugin
 {
@@ -88,6 +85,36 @@ namespace PipeInsulationPlugin
             }
         }
 
+        public static Tuple<double, double> GetPipeSizeFromTextBox(TextBox sizeFromTB, TextBox sizeToTB)
+        {
+            if (double.TryParse(sizeFromTB.Text, out double sizeFrom) == false && sizeFromTB.Text != "")
+            {
+                sizeFromTB.Text = "Insert valid value";
+            }
+            else if (sizeFromTB.Text == "")
+            {
+                sizeFrom = 0;
+            }
+
+            if (double.TryParse(sizeToTB.Text, out double sizeTo) == false && sizeToTB.Text != "")
+            {
+                sizeToTB.Text = "Insert valid value";
+            }
+            else if (sizeToTB.Text == "")
+            {
+                sizeTo = 999999;
+            }
+
+            return Tuple.Create(sizeFrom, sizeTo);
+        }
+
+        public static ElementId GetInsulationTypeId(ComboBox insulationTypeCombobox, List<Element> insulationTypes)
+        {
+            Element selectedInsulationType = insulationTypes.ElementAt(insulationTypeCombobox.SelectedIndex);
+
+            return selectedInsulationType.Id;
+        }
+
         public static void AddToCombo(Array array, ComboBox comboBox)
         {
             foreach (var item in array)
@@ -111,6 +138,8 @@ namespace PipeInsulationPlugin
                 propertyForSorting = "InsulationType";
             else if (selectedItem == "Comments")
                 propertyForSorting = "Comments";
+            else if (selectedItem == "ID")
+                propertyForSorting = "Id";
             else propertyForSorting = "InsulationThickness";
             return propertyForSorting;
         }

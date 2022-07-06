@@ -12,21 +12,73 @@
             <ColumnDefinition Width="800"/>
             <ColumnDefinition Width="600"/>
         </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="ListViewItem">
+                <Style.Triggers>
+                    <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                        <Setter Property="Background" Value="White" />
+                    </Trigger>
+                    <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                        <Setter Property="Background" Value="LightGray" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
-        <ListView x:Name="PipesListView" Margin="30" Grid.Row="0">
+        </Grid.Resources>
+
+        <ListView x:Name="PipesListView" Margin="30" Grid.Row="0"
+                  AlternationCount="2">
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn Header="Pipe Type" DisplayMemberBinding="{Binding PipeName}"/>
-                        <GridViewColumn Header="Size As String" DisplayMemberBinding="{Binding PipeNominalSizeString}"/>
-                        <GridViewColumn Header="Size" DisplayMemberBinding="{Binding PipeNominalSize}"/>
-                        <GridViewColumn Header="System Classification" DisplayMemberBinding="{Binding SystemClassification}"/>
-                        <GridViewColumn Header="System Type" DisplayMemberBinding="{Binding SystemType}"/>
-                        <GridViewColumn Header="Insulation Type" DisplayMemberBinding="{Binding InsulationType}"/>
-                        <GridViewColumn Header="Insulation Thickness" DisplayMemberBinding="{Binding InsulationThickness}"/>
-                        <GridViewColumn Header="Comments" DisplayMemberBinding="{Binding Comments}"/>
-                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}"/>
-
+                        <GridViewColumn DisplayMemberBinding="{Binding PipeName}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Pipe Type"
+                                                      Click="lvColumnHeader_Click"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="30" DisplayMemberBinding="{Binding PipeNominalSize}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Size"
+                                                      Click="lvColumnHeader_Click"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding SystemClassification}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="System Classification"
+                                                      Click="lvColumnHeader_Click"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding SystemType}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="System Type"
+                                                      Click="lvColumnHeader_Click"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding InsulationType}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Insulation Type"
+                                                      Click="lvColumnHeader_Click"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding InsulationThickness}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Insulation Thickness"
+                                                      Click="lvColumnHeader_Click"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Comments}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Comments"
+                                                      Click="lvColumnHeader_Click"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Id}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="ID"
+                                                      />
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
                     </GridView.Columns>
                 </GridView>
             </ListView.View>
@@ -38,8 +90,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="130"/>
                 <RowDefinition Height="20"/>
-                <RowDefinition Height="220"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="290"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.Resources>
                 <SolidColorBrush x:Key="brush" Color="LightGray"/>
@@ -113,7 +165,9 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
-                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <Grid.Resources>
                     <SolidColorBrush x:Key="brushFilter" Color="LightGray"/>
@@ -134,42 +188,59 @@
                               Width="250" 
                               HorizontalAlignment="Left"
                               Margin="25,0,0,0"/>
-                    <!--SelectionChanged="Filter1ComboBox_SelectionChanged"-->
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" 
-                    Grid.Column="1"
-                    Orientation="Horizontal"
-                    VerticalAlignment="Bottom"
-                    Margin="15,0,0,2">
+                            Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Bottom"
+                            Margin="15,0,0,2">
                     <Label>contains</Label>
                     <TextBox x:Name="TextBoxForFilter"
-                     Width="190"
-                     Height="25"
-                     HorizontalAlignment="Left"
-                     Margin="15,0,0,0"/>
+                             Width="180"
+                             Height="25"
+                             HorizontalAlignment="Left"
+                             Margin="15,0,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="0" Grid.Row="2">
                     <Label Content="Size from"
-                   Height="23"
-                   Margin="25,1,0,1"/>
-                    <ComboBox Name="Filter1SizeFromComboBox"
+                           Height="23"
+                           Margin="25,1,0,1"/>
+                    <TextBox x:Name="SizeFromTextBox"
+                             Width="250"
+                             HorizontalAlignment="Left"
+                             Margin="25,0,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="2">
+                    <Label Content="Size to"
+                           Height="23"
+                           Margin="15,1,0,1"/>
+                    <TextBox x:Name="SizeToTextBox"
+                             Width="250"
+                             HorizontalAlignment="Left"
+                             Margin="15,0,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="4">
+                    <Label Content="Insulation type"
+                           Height="23"
+                           Margin="25,1,0,1"/>
+                    <ComboBox Name="InsulationTypeComboBox"
                       SelectedIndex="0" 
                       Width="250" 
                       HorizontalAlignment="Left"
                       Margin="25,0,0,0"/>
                 </StackPanel>
-
-                <StackPanel Grid.Column="1" Grid.Row="2">
-                    <Label Content="Size to"
+                <StackPanel Grid.Column="1" Grid.Row="4">
+                    <Label Content="Insulation thickness"
                    Height="23"
                    Margin="15,1,0,1"/>
-                    <ComboBox Name="Filter1SizeToComboBox"
-                      SelectedIndex="0" 
-                      Width="250" 
-                      HorizontalAlignment="Left"
-                      Margin="15,0,0,0"/>
+                    <TextBox x:Name="InsulationThicknessTextBox"
+                             Width="250"
+                             Height="25"
+                             HorizontalAlignment="Left"
+                             Margin="15,0,0,0"/>
                 </StackPanel>
                 <Button x:Name="FilterBtn"
                         Content="Apply filter"
@@ -183,10 +254,10 @@
                 <Button x:Name="AddInsulationBtn"
                         Content="Add Insulation"
                         Click="AddInsulation_Click"
-                        Grid.Column="1" Grid.Row="3"
+                        Grid.Column="0" Grid.Row="6"
                         Width="150"
                         Height="30"
-                        Margin="15,0,0,0"
+                        Margin="25,0,0,0"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Left" />
                 <Border Grid.Column="0" Grid.Row="0" 
@@ -202,23 +273,46 @@
                 <Border Grid.Column="1" Grid.Row="2" 
                         BorderBrush="{StaticResource brushFilter}" BorderThickness="0,0,1,0"/>
                 <Border Grid.Column="0" Grid.Row="3" 
-                        BorderBrush="{StaticResource brushFilter}" BorderThickness="1,0,0,1"/>
+                        BorderBrush="{StaticResource brushFilter}" BorderThickness="1,0,0,0"/>
                 <Border Grid.Column="1" Grid.Row="3" 
+                        BorderBrush="{StaticResource brushFilter}" BorderThickness="0,0,1,0"/>
+                <Border Grid.Column="0" Grid.Row="4" 
+                        BorderBrush="{StaticResource brushFilter}" BorderThickness="1,0,0,0"/>
+                <Border Grid.Column="1" Grid.Row="4" 
+                        BorderBrush="{StaticResource brushFilter}" BorderThickness="0,0,1,0"/>
+                <Border Grid.Column="0" Grid.Row="5" 
+                        BorderBrush="{StaticResource brushFilter}" BorderThickness="1,0,0,1"/>
+                <Border Grid.Column="1" Grid.Row="5" 
                         BorderBrush="{StaticResource brushFilter}" BorderThickness="0,0,1,1"/>
 
             </Grid>
-            <StackPanel Orientation="Horizontal" 
-                        Grid.Column="0" Grid.Row="4">
-                <Button x:Name="BatchAddingInsulationBtn"
-                        Content="Batch Adding Insulation"
-                        Click="BatchAddingInsulationBtn_Click"
-                        Width="150"
-                        Height="30"
-                        Margin="10"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Left" />
+            <Grid Grid.Column="0" Grid.Row="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <SolidColorBrush x:Key="brushFilter" Color="LightGray"/>
+                </Grid.Resources>
+                    <Button x:Name="BatchAddingInsulationBtn"
+                            Content="Batch Adding Insulation"
+                            Click="BatchAddingInsulationBtn_Click"
+                            Width="150"
+                            Height="30"
+                            Margin="25,20,0,0"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"/>
+                    <Border Grid.Column="0" Grid.Row="0" 
+                            BorderBrush="{StaticResource brushFilter}" BorderThickness="1,1,1,1"/>
 
-            </StackPanel>
+                    <Button x:Name="RefreshListView"
+                            Content="Refresh Pipe List"
+                            Click="RefreshListView_Click"
+                            Width="150"
+                            Height="30"
+                            Margin="25,0,0,20"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"/>
+            </Grid>
 
 
 

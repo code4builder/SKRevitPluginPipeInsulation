@@ -1,5 +1,8 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Plumbing;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace PipeInsulationPlugin
 {
@@ -16,17 +19,27 @@ namespace PipeInsulationPlugin
             InsulationName = name;
         }
 
-        public static void CreatePipeInsulation(Document doc)
+        public static void CreatePipeInsulation(Document doc, List<PipeModel> filteredPipes, ComboBox InsulationTypeCombobox, TextBox InsulationThicknessTextBox)
         {
+            HelperFunctionalClass.DeleteInsulationForFilteredPipes(doc, filteredPipes);
+
+            double insulationThickness = double.Parse(InsulationThicknessTextBox.Text.ToString());
+            double insulationThicknessConversion = UnitUtils.ConvertToInternalUnits(insulationThickness, DisplayUnitType.DUT_METERS) / 1000;
+
+            List<Element> insulationTypesList = new List<Element>();
+            insulationTypesList = HelperFunctionalClass.GetInsulationTypes(doc);
+
+            ElementId insulationTypeIdforSingleFilter = HelperFunctionalClass.GetInsulationTypeId(InsulationTypeCombobox, insulationTypesList);
+
             using (Transaction t = new Transaction(doc))
             {
-                double thickness = 0.020;
-                double thicknessTemp = UnitUtils.ConvertToInternalUnits(thickness, DisplayUnitType.DUT_METERS);
-
                 t.Start("AddInsulation");
 
-                PipeInsulation pipeInsulation = PipeInsulation.Create(doc, new ElementId(177016), new ElementId(122535), thicknessTemp);
-
+                foreach (var element in filteredPipes)
+                {
+                    _ = PipeInsulation.Create(doc, element.Id, insulationTypeIdforSingleFilter, insulationThicknessConversion);
+                }
+                MessageBox.Show("Insulation added successfully");
                 t.Commit();
             }
         }

@@ -1,22 +1,9 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Autodesk.Revit.DB;
-using PipeInsulationPlugin.Views.UserControls;
-using PipeInsulationPlugin.Models;
 
 namespace PipeInsulationPlugin.Views
 {
@@ -52,11 +39,23 @@ namespace PipeInsulationPlugin.Views
             string[] FilteringComboBoxArray = { "Pipe Type", "System Classification", "System Type", "Insulation Type", "Comment" };
             HelperFunctionalClass.AddToCombo(FilteringComboBoxArray, Filter1ComboBox);
 
-            
-
+            InsulationTypeComboBox.ItemsSource = HelperFunctionalClass.GetInsulationTypeNames(doc);
         }
 
+        private void sortByColumnHeaderProperty(string primaryPropertyForSorting)
+        {
+            int charactersToRemoveForAccessToProperty = 46;
+            primaryPropertyForSorting = primaryPropertyForSorting.Substring(charactersToRemoveForAccessToProperty);
 
+            primaryPropertyForSorting = HelperFunctionalClass.ConvertComboboxItemToProperty(primaryPropertyForSorting);
+
+            PipesListView.Items.SortDescriptions[0] = new SortDescription(primaryPropertyForSorting, ListSortDirection.Ascending);
+        }
+
+        private void lvColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+            sortByColumnHeaderProperty(sender.ToString());
+        }
 
         public void SortList()
         {
@@ -70,7 +69,6 @@ namespace PipeInsulationPlugin.Views
             PipesListView.Items.SortDescriptions[0] = new SortDescription(primaryPropertyForSorting, ListSortDirection.Ascending);
             PipesListView.Items.SortDescriptions[1] = new SortDescription(secondaryPropertyForSorting, ListSortDirection.Ascending);
         }
-
 
         private void SortBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -94,32 +92,30 @@ namespace PipeInsulationPlugin.Views
         private bool PipeTypeFilter(object obj)
         {
             var Filterobj = obj as PipeModel;
-            return Filterobj.PipeName.Contains(TextBoxForFilter.Text.ToString());
+            return Filterobj.PipeName.ToLower().Contains(TextBoxForFilter.Text.ToString().ToLower());
         }
 
         private bool SystemClassificationFilter(object obj)
         {
             var Filterobj = obj as PipeModel;
-            return Filterobj.SystemClassification.Contains(TextBoxForFilter.Text.ToString());
+            return Filterobj.SystemClassification.ToLower().Contains(TextBoxForFilter.Text.ToString().ToLower());
         }
 
         private bool SystemTypeFilter(object obj)
         {
             var Filterobj = obj as PipeModel;
-            return Filterobj.SystemType.Contains(TextBoxForFilter.Text.ToString());
+            return Filterobj.SystemType.ToLower().Contains(TextBoxForFilter.Text.ToString().ToLower());
         }
         private bool InsulationTypeFilter(object obj)
         {
             var Filterobj = obj as PipeModel;
-            return Filterobj.InsulationType.Contains(TextBoxForFilter.Text.ToString());
+            return Filterobj.InsulationType.ToLower().Contains(TextBoxForFilter.Text.ToString().ToLower());
         }
         private bool CommentsFilter(object obj)
         {
             var Filterobj = obj as PipeModel;
-            return Filterobj.Comments.Contains(TextBoxForFilter.Text.ToString());
+            return Filterobj.Comments.ToLower().Contains(TextBoxForFilter.Text.ToString().ToLower());
         }
-
-
 
         private void FilterApplyBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -130,24 +126,57 @@ namespace PipeInsulationPlugin.Views
             else
             {
                 PipesListView.Items.Filter = GetFilter();
+
+                double sizeFrom = HelperFunctionalClass.GetPipeSizeFromTextBox(SizeFromTextBox, SizeToTextBox).Item1;
+                double sizeTo = HelperFunctionalClass.GetPipeSizeFromTextBox(SizeFromTextBox, SizeToTextBox).Item2;
+
+                List<PipeModel> filteredPipesByComboBox = new List<PipeModel>();
+
+                foreach (var item in PipesListView.Items)
+                {
+                    filteredPipesByComboBox.Add(item as PipeModel);
+                }
+
+                List<PipeModel> filteredPipesBySize = new List<PipeModel>();
+
+                foreach (var pipe in filteredPipesByComboBox)
+                {
+                    if (pipe.PipeNominalSize >= sizeFrom && pipe.PipeNominalSize <= sizeTo)
+                    {
+                        filteredPipesBySize.Add(pipe);
+                    }
+                }
+                PipesListView.ItemsSource = filteredPipesBySize;
+                allFilteredPipes = filteredPipesBySize;
             }
         }
 
-
-
-
-
-
-
         private void AddInsulation_Click(object sender, RoutedEventArgs e)
         {
-            InsulationModel.CreatePipeInsulation(doc);
+            if (allFilteredPipes.Count != 0 && InsulationThicknessTextBox.Text != "")
+            {
+                InsulationModel.CreatePipeInsulation(doc, allFilteredPipes, InsulationTypeComboBox, InsulationThicknessTextBox);
+            }
+            else if (allFilteredPipes.Count == 0)
+            {
+                MessageBox.Show("Please add filter");
+            }
+            else if (InsulationThicknessTextBox.Text == "")
+            {
+                MessageBox.Show("Please add insulation thickness");
+            }
         }
 
         private void BatchAddingInsulationBtn_Click(object sender, RoutedEventArgs e)
         {
             AddInsulationView addInsulationView = new AddInsulationView(pipesWithParams, allFilteredPipes, insulationWithParameters, doc);
             addInsulationView.Show();
+        }
+
+        private void RefreshListView_Click(object sender, RoutedEventArgs e)
+        {
+            pipesWithParams = HelperFunctionalClass.GetAllParametersToLists(doc).Item1;
+            PipesListView.ItemsSource = pipesWithParams;
         }
     }
 }

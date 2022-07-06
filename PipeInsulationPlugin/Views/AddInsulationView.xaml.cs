@@ -1,21 +1,12 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Plumbing;
+using Microsoft.Win32;
+using PipeInsulationPlugin.Views.UserControls;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Plumbing;
-using PipeInsulationPlugin;
-using PipeInsulationPlugin.Views.UserControls;
 
 namespace PipeInsulationPlugin.Views
 {
@@ -30,6 +21,7 @@ namespace PipeInsulationPlugin.Views
         List<InsulationModel> insulationWithParameters;
         Document doc;
         List<Element> insulationTypesList;
+        List<FilterUserControl> allFilterUserControls = new List<FilterUserControl>();
 
         public AddInsulationView(List<PipeModel> pipes, List<PipeModel> filteredPipes, List<InsulationModel> insulations, Document document)
         {
@@ -39,118 +31,162 @@ namespace PipeInsulationPlugin.Views
             insulationWithParameters = insulations;
             doc = document;
 
-            insulationTypesList = PipeInsulationPlugin.HelperFunctionalClass.GetInsulationTypes(doc);
+            insulationTypesList = HelperFunctionalClass.GetInsulationTypes(doc);
 
             Filter1UC.InsulationTypeCombobox.ItemsSource = PipeInsulationPlugin.HelperFunctionalClass.GetInsulationTypeNames(doc);
-            Filter2UC.InsulationTypeCombobox.ItemsSource = PipeInsulationPlugin.HelperFunctionalClass.GetInsulationTypeNames(doc);
 
-
-
+            allFilterUserControls.Add(Filter1UC);
         }
 
-        private List<PipeModel> FilterSingleUC(TextBox SystemTypeTB, TextBox sizeFromTB, TextBox sizeToTB)
+        private List<PipeModel> FilterSingleUC(TextBox SystemTypeTB, TextBox sizeFromTB, TextBox sizeToTB, TextBox CommentsTB)
         {
             SingleFilterPipesList.Clear();
 
-
-            if (double.TryParse(sizeFromTB.Text, out double sizeFrom) == false && sizeFromTB.Text != "")
-            {
-                sizeFromTB.Text = "Insert valid value";
-            }
-            else if (sizeFromTB.Text == "")
-            {
-                sizeFrom = 0;
-            }
-
-
-            if (double.TryParse(sizeToTB.Text, out double sizeTo) == false && sizeToTB.Text != "")
-            {
-                sizeFromTB.Text = "Insert valid value";
-            }
-            else if (sizeToTB.Text == "")
-            {
-                sizeTo = 999999;
-            }
-
-            //if (double.TryParse(sizeToTB.Text, out double sizeTo) == false && sizeToTB.Text != null)
-            //{
-            //    sizeToTB.Text = "Insert valid value";
-            //}
+            double sizeFrom = HelperFunctionalClass.GetPipeSizeFromTextBox(sizeFromTB, sizeToTB).Item1;
+            double sizeTo = HelperFunctionalClass.GetPipeSizeFromTextBox(sizeFromTB, sizeToTB).Item2;
 
             foreach (var pipe in allPipes)
             {
-                if (pipe.SystemType.ToString().ToLower().Contains(SystemTypeTB.Text.ToString().ToLower())
-                    && pipe.PipeNominalSize >= sizeFrom
-                    && pipe.PipeNominalSize <= sizeTo)
+                if (CommentsTB.Text != "")
+                {
+                    if (pipe.Comments != null)
+                    {
+                        if (pipe.SystemType.ToString().ToLower().Contains(SystemTypeTB.Text.ToString().ToLower())
+                            && pipe.PipeNominalSize >= sizeFrom
+                            && pipe.PipeNominalSize <= sizeTo
+                            && pipe.Comments.ToString().ToLower().Contains(CommentsTB.Text.ToString().ToLower()))
+                        {
+                            SingleFilterPipesList.Add(pipe);
+                        }
+                    }
+                }
+                else if (pipe.SystemType.ToString().ToLower().Contains(SystemTypeTB.Text.ToString().ToLower())
+                        && pipe.PipeNominalSize >= sizeFrom
+                        && pipe.PipeNominalSize <= sizeTo)
                 {
                     SingleFilterPipesList.Add(pipe);
                 }
             }
-            if (allFilteredPipes != null)
-            {
-                MessageBox.Show($"Single Filter: {SingleFilterPipesList.Count}");
-            }
-            else
-            {
-                MessageBox.Show("null");
-            }
+
             return SingleFilterPipesList;
         }
 
-
-        private ElementId GetInsulationTypeId(ComboBox insulationTypeCombobox, List<Element> insulationTypes)
+        private void AddFilterUC_Click(object sender, RoutedEventArgs e)
         {
-            Element selectedInsulationType = insulationTypes.ElementAt(insulationTypeCombobox.SelectedIndex);
-
-            return selectedInsulationType.Id;
+            AddNewFilterUserControl();
         }
 
+        private void AddNewFilterUserControl()
+        {
+            string filterUCName = "Filter" + (BatchAddingStackPanel.Children.Count + 1).ToString() + "UC";
 
+            FilterUserControl newFilter = new FilterUserControl();
+            newFilter.FilterNameLabel.Content = "FILTER " + (BatchAddingStackPanel.Children.Count + 1).ToString();
 
+            BatchAddingStackPanel.Children.Add(newFilter);
+            allFilterUserControls.Add(newFilter);
+
+            newFilter.InsulationTypeCombobox.ItemsSource = PipeInsulationPlugin.HelperFunctionalClass.GetInsulationTypeNames(doc);
+
+            newFilter.Name = filterUCName;
+
+            foreach (FilterUserControl userControl in allFilterUserControls)
+            {
+                if (userControl.Name == "newFilter")
+                {
+                    userControl.Name = "filterUCName";
+                }
+            }
+        }
 
         private void BatchAddInsulationButton_Click(object sender, RoutedEventArgs e)
         {
             allFilteredPipes.Clear();
 
-            allFilteredPipes.AddRange(FilterSingleUC(Filter1UC.SystemTypeTextBox, Filter1UC.SizeFromTextBox, Filter1UC.SizeToTextBox));
-            allFilteredPipes.AddRange(FilterSingleUC(Filter2UC.SystemTypeTextBox, Filter2UC.SizeFromTextBox, Filter2UC.SizeToTextBox));
-
-
-            if (allFilteredPipes != null)
+            foreach (FilterUserControl userControl in allFilterUserControls)
             {
-                MessageBox.Show($"Total Filter: {allFilteredPipes.Count}");
-            }
-            else
-            {
-                MessageBox.Show("null");
+                allFilteredPipes.AddRange(FilterSingleUC(userControl.SystemTypeTextBox, userControl.SizeFromTextBox, userControl.SizeToTextBox, userControl.CommentsTextBox));
             }
 
             HelperFunctionalClass.DeleteInsulationForFilteredPipes(doc, allFilteredPipes);
 
-
-
-
-                using (Transaction t = new Transaction(doc))
+            foreach (FilterUserControl userControl in allFilterUserControls)
             {
-
-                double insulationThickness = double.Parse(Filter1UC.InsulationThicknessTextBox.Text.ToString());
-                double insulationThicknessConversion = UnitUtils.ConvertToInternalUnits(insulationThickness, DisplayUnitType.DUT_METERS)/1000;
-
-                t.Start("BatchAddInsulation");
-
-
-                ElementId insulationTypeIdforFilter1 = GetInsulationTypeId(Filter1UC.InsulationTypeCombobox, insulationTypesList);
-
-                foreach (var element in allFilteredPipes)
+                using (Transaction t = new Transaction(doc))
                 {
-                    _ = PipeInsulation.Create(doc, element.Id, insulationTypeIdforFilter1, insulationThicknessConversion);
-                }
+                    t.Start("BatchAddInsulation");
 
-                t.Commit();
+                    double insulationThickness = double.Parse(userControl.InsulationThicknessTextBox.Text.ToString());
+                    double insulationThicknessConversion = UnitUtils.ConvertToInternalUnits(insulationThickness, DisplayUnitType.DUT_METERS) / 1000;
+
+                    ElementId insulationTypeIdforSingleFilter = HelperFunctionalClass.GetInsulationTypeId(userControl.InsulationTypeCombobox, insulationTypesList);
+
+                    List<PipeModel> SingleFilterPipes = new List<PipeModel>();
+                    SingleFilterPipes = FilterSingleUC(userControl.SystemTypeTextBox, userControl.SizeFromTextBox, userControl.SizeToTextBox, userControl.CommentsTextBox);
+
+                    foreach (var element in SingleFilterPipes)
+                    {
+                        _ = PipeInsulation.Create(doc, element.Id, insulationTypeIdforSingleFilter, insulationThicknessConversion);
+                    }
+                    t.Commit();
+                }
             }
 
             MessageBox.Show("Insulation added successfully");
 
+        }
+
+        private void LoadFilters_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Filter = "Comma Separated Values File|*.csv";
+            openFileDialog.RestoreDirectory = true;
+            openFileDialog.ShowDialog();
+            string filePath = openFileDialog.FileName;
+
+            var linesFromCSV = File.ReadAllLines(filePath).Select(a => a.Split(','));
+
+            AddValuesToFilterUC(linesFromCSV.ElementAt(0), Filter1UC);
+            List<string[]> linesListFromSecond =  linesFromCSV.ToList();
+            linesListFromSecond.RemoveAt(0);
+
+            foreach (var line in linesListFromSecond)
+            {
+                AddNewFilterUserControl();
+                AddValuesToFilterUC(line, allFilterUserControls.Last());
+            }
+        }
+
+        private static void AddValuesToFilterUC(string[] line, FilterUserControl filterUserControl)
+        {
+            filterUserControl.SystemTypeTextBox.Text = line[0];
+            filterUserControl.SizeFromTextBox.Text = line[1];
+            filterUserControl.SizeToTextBox.Text = line[2];
+            filterUserControl.InsulationTypeCombobox.SelectedItem = line[3];
+            filterUserControl.InsulationThicknessTextBox.Text = line[4];
+            filterUserControl.CommentsTextBox.Text = line[5];
+        }
+
+        private void SaveFilters_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Comma Separated Values File|*.csv";
+            saveFileDialog.Title = "Save an CSV File";
+            saveFileDialog.ShowDialog();
+
+            string filePath = Path.GetFullPath(saveFileDialog.FileName);
+            List<string> allFiltersData = new List<string>();
+
+            foreach (FilterUserControl userControl in allFilterUserControls)
+            {
+                string filterData = $"{userControl.SystemTypeTextBox.Text},{userControl.SizeFromTextBox.Text},{userControl.SizeToTextBox.Text}" +
+                    $",{userControl.InsulationTypeCombobox.Text},{userControl.InsulationThicknessTextBox.Text},{userControl.CommentsTextBox.Text}";
+                allFiltersData.Add(filterData);
+            }
+
+            File.WriteAllLines(filePath, allFiltersData);
+            MessageBox.Show("Filters saved");
         }
     }
 }
