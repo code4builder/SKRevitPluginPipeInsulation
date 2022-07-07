@@ -1,13 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <RevitAddIns>
-	<AddIn Type ="Command">
+	<AddIn Type="Application">
+		<Name>SampleApplication</Name>
 		<Assembly>PipeInsulationPlugin.dll</Assembly>
-		<ClientId>0bb663c9-82e3-4920-b4c4-2c913c74a81c</ClientId>
-		<FullClassName>PipeInsulationPlugin.StartClassPlugin</FullClassName>
-		<Text>Pipe Insulation Plugin</Text>
-		<Description>Adding insulation on pipes Plugin</Description>
-		<VendorId>Sergey Kuleshov</VendorId>
-		<VendorDescription></VendorDescription>
-		<VisibilityMode>AlwaysVisible</VisibilityMode>
+		<AddInId>604b1052-f742-4951-8576-c261d1993108</AddInId>
+		<FullClassName>PipeInsulationPlugin.App</FullClassName>
+		<VendorId>Sergey</VendorId>
+		<VendorDescription>sk@bim-s.it</VendorDescription>
 	</AddIn>
 </RevitAddIns>
