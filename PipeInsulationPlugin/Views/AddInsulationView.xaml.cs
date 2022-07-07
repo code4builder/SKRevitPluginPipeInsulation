@@ -1,6 +1,5 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Plumbing;
-using Autodesk.Revit.UI;
 using Microsoft.Win32;
 using PipeInsulationPlugin.Views.UserControls;
 using System.Collections.Generic;
@@ -82,7 +81,7 @@ namespace PipeInsulationPlugin.Views
             string filterUCName = "Filter" + (BatchAddingStackPanel.Children.Count + 1).ToString() + "UC";
 
             FilterUserControl newFilter = new FilterUserControl();
-            newFilter.FilterNameLabel.Text = "FILTER " + (BatchAddingStackPanel.Children.Count + 1).ToString();
+            newFilter.FilterNameLabel.Content = "FILTER " + (BatchAddingStackPanel.Children.Count + 1).ToString();
 
             BatchAddingStackPanel.Children.Add(newFilter);
             allFilterUserControls.Add(newFilter);

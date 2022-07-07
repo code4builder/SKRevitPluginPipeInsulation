@@ -3,29 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:PipeInsulationPlugin.Views.UserControls"
              xmlns:startclass="clr-namespace:PipeInsulationPlugin"
              mc:Ignorable="d"
              Width="505" Height="280"
              d:DesignHeight="280" d:DesignWidth="505">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
     <Grid Margin="2" HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="55"/>
             <RowDefinition Height="55"/>
@@ -34,20 +23,12 @@
         <Grid.Resources>
             <SolidColorBrush x:Key="brushFilter" Color="LightGray"/>
         </Grid.Resources>
-        
-        <materialDesign:Card
-                      Background="{DynamicResource PrimaryHueDarkBrush}"
-                      Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                      Width="200"
-                      Height="30"
-                      Padding="8"
-                      Grid.Column="0" Grid.Row="0"
-                      UniformCornerRadius="6">
-                                <TextBlock
-                                    x:Name="FilterNameLabel"
-                                    Text="FILTER 1"
-                                    HorizontalAlignment="Center"/>
-        </materialDesign:Card>
+
+        <Label x:Name="FilterNameLabel"
+               Content="FILTER 1" FontWeight="Heavy"
+               Grid.Column="0" Grid.Row="0"
+               Height="30"
+               Margin="25,5,5,5"/>
 
         <Label Grid.Column="0" Grid.Row="1"
                Content="System Type contains"
@@ -57,6 +38,7 @@
         <TextBox Grid.Column="1" Grid.Row="1"
                  x:Name="SystemTypeTextBox" 
                  Width="200"
+                 Height="20"
                  VerticalAlignment="Center"/>
 
         <StackPanel Grid.Column="0" Grid.Row="2">
@@ -64,6 +46,7 @@
                    Margin="20,0,0,0"/>
             <TextBox x:Name="SizeFromTextBox" 
                      Width="200"
+                     Height="20"
                      Margin="0,0,0,0"/>
         </StackPanel>
 
@@ -72,6 +55,7 @@
                    Margin="20,0,0,0"/>
             <TextBox x:Name="SizeToTextBox" 
                      Width="200"
+                     Height="20"
                      Margin="0,0,0,0"/>
         </StackPanel>
 
@@ -83,6 +67,7 @@
         <TextBox Grid.Column="1" Grid.Row="3"
                  x:Name="CommentsTextBox" 
                  Width="200"
+                 Height="20"
                  VerticalAlignment="Center"/>
         
         <StackPanel Grid.Column="0" Grid.Row="4">
@@ -94,6 +79,7 @@
             <ComboBox x:Name="InsulationTypeCombobox"
                      SelectedIndex="0"
                      Width="200"
+                     Height="20"
                      Margin="0,0,0,0"/>
         </StackPanel>
 
@@ -102,6 +88,7 @@
                    Margin="20,26,0,0"/>
             <TextBox x:Name="InsulationThicknessTextBox" 
                      Width="200"
+                     Height="20"
                      Margin="0,0,0,0"/>
         </StackPanel>
 

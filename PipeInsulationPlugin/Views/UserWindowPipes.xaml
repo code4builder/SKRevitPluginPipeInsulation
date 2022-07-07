@@ -3,27 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:PipeInsulationPlugin"
+             xmlns:uc="clr-namespace:PipeInsulationPlugin.Views.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1400">
-    <Window.Resources>
-        <ResourceDictionary>
-            <!--<Style TargetType="ListViewItem">
-                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            </Style>-->
-
-            <!--<DataTemplate x:Key="CenterAllignmentTemplate">
-                <TextBlock HorizontalAlignment="Center"/>
-            </DataTemplate>-->
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="800"/>
@@ -31,7 +14,6 @@
         </Grid.ColumnDefinitions>
         <Grid.Resources>
             <Style TargetType="ListViewItem">
-                <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Style.Triggers>
                     <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
                         <Setter Property="Background" Value="White" />
@@ -41,12 +23,6 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <DataTemplate x:Key="CenterAllignmentTemplate">
-                <TextBlock HorizontalAlignment="Center"/>
-            </DataTemplate>
-            <!--<Style TargetType="ListViewItem">
-                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            </Style>-->
 
         </Grid.Resources>
 
@@ -55,16 +31,13 @@
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn DisplayMemberBinding="{Binding PipeName}"
-                                        CellTemplate="{StaticResource CenterAllignmentTemplate}">
+                        <GridViewColumn DisplayMemberBinding="{Binding PipeName}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Content="Pipe Type"
-                                                      HorizontalContentAlignment="Center"
                                                       Click="lvColumnHeader_Click"/>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding PipeNominalSize}"
-                                        CellTemplate="{StaticResource CenterAllignmentTemplate}">
+                        <GridViewColumn Width="30" DisplayMemberBinding="{Binding PipeNominalSize}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Content="Size"
                                                       Click="lvColumnHeader_Click"/>
@@ -115,9 +88,9 @@
               Grid.Column="1"
               Margin="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="160"/>
+                <RowDefinition Height="130"/>
                 <RowDefinition Height="20"/>
-                <RowDefinition Height="330"/>
+                <RowDefinition Height="290"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.Resources>
@@ -128,7 +101,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="60"/>
-                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*"/>
@@ -138,8 +111,7 @@
                        Grid.Row="0" Grid.Column="0"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
-                       Margin="25,4,4,4"
-                       FontSize="15"/>
+                       Margin="25,4,4,4"/>
                 <StackPanel Grid.Column="0" Grid.Row="1">
                     <Label Content="Sort by primary key" 
                            Margin="25,5,0,2"/>
@@ -153,10 +125,10 @@
                             Content="Apply sorting"
                             Click="SortBtn_Click"
                             Grid.Row="2"
-                            Width="200"
-                            Height="30"
-                            Margin="25,0,0,0"
-                            VerticalAlignment="Center"
+                            Width="150"
+                            Height="20"
+                            Margin="25,3,0,0"
+                            VerticalAlignment="Top"
                             HorizontalAlignment="Left"/>
                 <StackPanel Grid.Column="1" Grid.Row="1">
                     <Label Content="Sort by secondary key" 
@@ -191,8 +163,8 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
-                    <RowDefinition Height="70"/>
-                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
@@ -201,16 +173,15 @@
                     <SolidColorBrush x:Key="brushFilter" Color="LightGray"/>
                 </Grid.Resources>
 
-                <Label Content="FILTERING" FontWeight="Heavy"
+                <Label Content="FILTER" FontWeight="Heavy"
                        Grid.Column="0" Grid.Row="0"
                        Height="30"
-                       FontSize="15"
                        Margin="25,5,5,5"/>
 
                 <StackPanel Grid.Column="0" Grid.Row="1">
-                    <Label Content="Choose parameter for filtering" 
+                    <Label Content="Filter 1" 
                            Height="23"
-                           Margin="25,1,0,5"
+                           Margin="25,1,0,1"
                            VerticalAlignment="Center"/>
                     <ComboBox Name="Filter1ComboBox"
                               SelectedIndex="2"
@@ -222,11 +193,12 @@
                 <StackPanel Grid.Row="1" 
                             Grid.Column="1"
                             Orientation="Horizontal"
-                            VerticalAlignment="Center"
-                            Margin="15,10,0,2">
+                            VerticalAlignment="Bottom"
+                            Margin="15,0,0,2">
                     <Label>contains</Label>
                     <TextBox x:Name="TextBoxForFilter"
                              Width="180"
+                             Height="25"
                              HorizontalAlignment="Left"
                              Margin="15,0,0,0"/>
                 </StackPanel>
@@ -234,7 +206,7 @@
                 <StackPanel Grid.Column="0" Grid.Row="2">
                     <Label Content="Size from"
                            Height="23"
-                           Margin="25,10,0,1"/>
+                           Margin="25,1,0,1"/>
                     <TextBox x:Name="SizeFromTextBox"
                              Width="250"
                              HorizontalAlignment="Left"
@@ -244,7 +216,7 @@
                 <StackPanel Grid.Column="1" Grid.Row="2">
                     <Label Content="Size to"
                            Height="23"
-                           Margin="15,10,0,1"/>
+                           Margin="15,1,0,1"/>
                     <TextBox x:Name="SizeToTextBox"
                              Width="250"
                              HorizontalAlignment="Left"
@@ -273,7 +245,7 @@
                 <Button x:Name="FilterBtn"
                         Content="Apply filter"
                         Grid.Column="0" Grid.Row="3"
-                        Width="200"
+                        Width="150"
                         Height="30"
                         Margin="25,0,0,0"
                         VerticalAlignment="Center"
@@ -283,7 +255,7 @@
                         Content="Add Insulation"
                         Click="AddInsulation_Click"
                         Grid.Column="0" Grid.Row="6"
-                        Width="200"
+                        Width="150"
                         Height="30"
                         Margin="25,0,0,0"
                         VerticalAlignment="Center"
@@ -324,54 +296,31 @@
                     <Button x:Name="BatchAddingInsulationBtn"
                             Content="Batch Adding Insulation"
                             Click="BatchAddingInsulationBtn_Click"
-                            Width="200"
+                            Width="150"
                             Height="30"
                             Margin="25,20,0,0"
                             VerticalAlignment="Top"
-                            Style="{StaticResource MaterialDesignFlatDarkBgButton}"
                             HorizontalAlignment="Left"/>
                     <Border Grid.Column="0" Grid.Row="0" 
                             BorderBrush="{StaticResource brushFilter}" BorderThickness="1,1,1,1"/>
-                <Button x:Name="RefreshListView"
+
+                    <Button x:Name="RefreshListView"
+                            Content="Refresh Pipe List"
                             Click="RefreshListView_Click"
-                            ToolTip="Refresh Pipe List"
-                            Width="50"
+                            Width="150"
                             Height="30"
                             Margin="25,0,0,20"
                             VerticalAlignment="Bottom"
-                            HorizontalAlignment="Left"
-                            Style="{StaticResource MaterialDesignOutlinedButton}">
-                    <Button.Content>
-                        <materialDesign:PackIcon Kind="Refresh" />
-                    </Button.Content>
-                </Button>
-
-                <Button x:Name="YouTubeLinkButton"
-                            Click="YouTubeLinkButton_Click"
-                            ToolTip="Watch YouTube Video Guide"
-                            Width="50"
-                            Height="30"
-                            Margin="25,0,80,20"
-                            VerticalAlignment="Bottom"
-                            HorizontalAlignment="Right"
-                            Style="{StaticResource MaterialDesignOutlinedButton}">
-                    <Button.Content>
-                        <materialDesign:PackIcon Kind="Youtube"/>
-                    </Button.Content>
-                </Button>
-                <Button x:Name="AboutButton"
-                            Click="AboutButton_Click"
-                            Width="50"
-                            Height="30"
-                            Margin="25,0,25,20"
-                            VerticalAlignment="Bottom"
-                            HorizontalAlignment="Right"
-                            Style="{StaticResource MaterialDesignOutlinedButton}">
-                    <Button.Content>
-                        <materialDesign:PackIcon Kind="InformationOutline" />
-                    </Button.Content>
-                </Button>
+                            HorizontalAlignment="Left"/>
             </Grid>
+
+
+
+
+
+
+
+
         </Grid>
     </Grid>
 </Window>
