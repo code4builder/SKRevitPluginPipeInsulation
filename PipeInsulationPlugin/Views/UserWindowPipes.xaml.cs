@@ -178,5 +178,16 @@ namespace PipeInsulationPlugin.Views
             pipesWithParams = HelperFunctionalClass.GetAllParametersToLists(doc).Item1;
             PipesListView.ItemsSource = pipesWithParams;
         }
+
+        private void YouTubeLinkButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AboutButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Revit Plugin - Pipe Insulation \n \nVersion 1.0.0" +
+                "\n \nDeveloped by Sergey Kuleshov \n \nEmail: sk@bim-s.it");
+        }
     }
 }

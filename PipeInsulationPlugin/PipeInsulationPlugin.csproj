@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -53,10 +54,16 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App.cs" />
     <Compile Include="Models\HelperFunctionalClass.cs" />
     <Compile Include="Models\InsulationModel.cs" />
     <Compile Include="Models\PipeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="StartClassPlugin.cs" />
     <Compile Include="Views\AddInsulationView.xaml.cs">
       <DependentUpon>AddInsulationView.xaml</DependentUpon>
@@ -69,7 +76,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PipeInsulationPlugin.addin" />
+    <Content Include="PipeInsulationPlugin.addin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Resources\pipe_insulation_new.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\AddInsulationView.xaml">
@@ -85,6 +95,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

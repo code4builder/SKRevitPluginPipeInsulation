@@ -312,6 +312,29 @@
                             Margin="25,0,0,20"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Left"/>
+                <Button x:Name="YouTubeLinkButton"
+                            Click="YouTubeLinkButton_Click"
+                            ToolTip="Watch YouTube Video Guide"
+                            Width="50"
+                            Height="30"
+                            Margin="25,0,80,20"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right">
+                    <Button.Content>
+                        <Label Content="YouTubeLink"/>
+                    </Button.Content>
+                </Button>
+                <Button x:Name="AboutButton"
+                            Click="AboutButton_Click"
+                            Width="50"
+                            Height="30"
+                            Margin="25,0,25,20"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right">
+                    <Button.Content>
+                        <Label Content="About"/>
+                    </Button.Content>
+                </Button>
             </Grid>
 
 
