@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.Attributes;
-using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.DB.Mechanical;
-using Autodesk.Revit.DB.Plumbing;
-using PipeInsulationPlugin.Views;
+using SKRevitPluginPipeInsulation.Views;
+using System.Collections.Generic;
 
-namespace PipeInsulationPlugin
+namespace SKRevitPluginPipeInsulation
 {
     [TransactionAttribute(TransactionMode.Manual)]
     [RegenerationAttribute(RegenerationOption.Manual)]
@@ -23,14 +16,9 @@ namespace PipeInsulationPlugin
 
             List<PipeModel> pipesWithParameters = HelperFunctionalClass.GetAllParametersToLists(doc).Item1;
             List<InsulationModel> insulationWithParameters = HelperFunctionalClass.GetAllParametersToLists(doc).Item2;
-            List<PipeModel> filteredPipes = new List<PipeModel>();
+            List<PipeFittingModel> pipesFittingsWithParameters = HelperFunctionalClass.GetAllParametersToLists(doc).Item3;
             List<Element> insulationTypes = HelperFunctionalClass.GetInsulationTypes(doc);
-
-            //List<string> insulationTypesNames = HelperFunctionalClass.GetInsulationTypeNames(doc);
-
-
-
-            UserWindowPipes userWindowPipes = new UserWindowPipes(doc, pipesWithParameters, insulationWithParameters, filteredPipes);
+            UserWindowPipes userWindowPipes = new UserWindowPipes(doc, pipesWithParameters, insulationWithParameters, pipesFittingsWithParameters);
 
             userWindowPipes.ShowDialog();
 
