@@ -7,12 +7,8 @@
              xmlns:uc="clr-namespace:PipeInsulationPlugin.Views.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1400">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="800"/>
-            <ColumnDefinition Width="600"/>
-        </Grid.ColumnDefinitions>
-        <Grid.Resources>
+    <Window.Resources>
+        <ResourceDictionary>
             <Style TargetType="ListViewItem">
                 <Style.Triggers>
                     <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
@@ -22,9 +18,24 @@
                         <Setter Property="Background" Value="LightGray" />
                     </Trigger>
                 </Style.Triggers>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             </Style>
 
-        </Grid.Resources>
+            <DataTemplate x:Key="CenterAllignmentTemplate">
+                <TextBlock HorizontalAlignment="Center"
+                           Text="{Binding PipeNominalSize}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="CenterAllignmentTemplateForInsulationThickness">
+                <TextBlock HorizontalAlignment="Center"
+                           Text="{Binding InsulationThickness}"/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="800"/>
+            <ColumnDefinition Width="600"/>
+        </Grid.ColumnDefinitions>
 
         <ListView x:Name="PipesListView" Margin="30" Grid.Row="0"
                   AlternationCount="2">
@@ -37,12 +48,14 @@
                                                       Click="lvColumnHeader_Click"/>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="30" DisplayMemberBinding="{Binding PipeNominalSize}">
+                        <GridViewColumn Width="40" 
+                                        CellTemplate="{StaticResource CenterAllignmentTemplate}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Content="Size"
                                                       Click="lvColumnHeader_Click"/>
                             </GridViewColumn.Header>
                         </GridViewColumn>
+                        
                         <GridViewColumn DisplayMemberBinding="{Binding SystemClassification}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Content="System Classification"
@@ -61,7 +74,7 @@
                                                       Click="lvColumnHeader_Click"/>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding InsulationThickness}">
+                        <GridViewColumn CellTemplate="{StaticResource CenterAllignmentTemplateForInsulationThickness}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Content="Insulation Thickness"
                                                       Click="lvColumnHeader_Click"/>
@@ -75,8 +88,7 @@
                         </GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Id}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Content="ID"
-                                                      />
+                                <GridViewColumnHeader Content="ID"/>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                     </GridView.Columns>

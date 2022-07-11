@@ -28,8 +28,8 @@ namespace PipeInsulationPlugin
 
             // create push button for CurveTotalLength
             PushButtonData b1Data = new PushButtonData(
-                "PipeInsulationPlugin",
-                "PipeInsulationPlugin",
+                "Pipe Insulation",
+                "Pipe Insulation",
                 thisAssemblyPath,
                 "PipeInsulationPlugin.StartClassPlugin");
 
