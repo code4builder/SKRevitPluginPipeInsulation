@@ -16,20 +16,24 @@ namespace PipeInsulationPlugin.Views
     public partial class AddInsulationView : Window
     {
         List<PipeModel> allPipes;
-        List<PipeModel> allFilteredPipes;
-        List<PipeModel> SingleFilterPipesList = new List<PipeModel>();
+        List<ElementModel> allFilteredPipes = new List<ElementModel>();
+        List<ElementModel> SingleFilterPipesList = new List<ElementModel>();
+        List<PipeFittingModel> allPipeFittings;
         List<InsulationModel> insulationWithParameters;
+        List<ElementModel> allPipesAndFittings;
         Document doc;
         List<Element> insulationTypesList;
         List<FilterUserControl> allFilterUserControls = new List<FilterUserControl>();
 
-        public AddInsulationView(List<PipeModel> pipes, List<PipeModel> filteredPipes, List<InsulationModel> insulations, Document document)
+        public AddInsulationView(List<PipeModel> pipes, List<PipeFittingModel> pipeFittings, List<InsulationModel> insulations, Document document)
         {
             InitializeComponent();
             allPipes = pipes;
-            allFilteredPipes = filteredPipes;
+            allPipeFittings = pipeFittings;
             insulationWithParameters = insulations;
             doc = document;
+            
+            allPipesAndFittings = allPipes.Cast<ElementModel>().Concat(allPipeFittings.Cast<ElementModel>()).ToList();
 
             insulationTypesList = HelperFunctionalClass.GetInsulationTypes(doc);
 
@@ -38,14 +42,14 @@ namespace PipeInsulationPlugin.Views
             allFilterUserControls.Add(Filter1UC);
         }
 
-        private List<PipeModel> FilterSingleUC(TextBox SystemTypeTB, TextBox sizeFromTB, TextBox sizeToTB, TextBox CommentsTB)
+        private List<ElementModel> FilterSingleUC(TextBox SystemTypeTB, TextBox sizeFromTB, TextBox sizeToTB, TextBox CommentsTB)
         {
             SingleFilterPipesList.Clear();
 
             double sizeFrom = HelperFunctionalClass.GetPipeSizeFromTextBox(sizeFromTB, sizeToTB).Item1;
             double sizeTo = HelperFunctionalClass.GetPipeSizeFromTextBox(sizeFromTB, sizeToTB).Item2;
 
-            foreach (var pipe in allPipes)
+            foreach (var pipe in allPipesAndFittings)
             {
                 if (CommentsTB.Text != "")
                 {
@@ -121,7 +125,7 @@ namespace PipeInsulationPlugin.Views
 
                     ElementId insulationTypeIdforSingleFilter = HelperFunctionalClass.GetInsulationTypeId(userControl.InsulationTypeCombobox, insulationTypesList);
 
-                    List<PipeModel> SingleFilterPipes = new List<PipeModel>();
+                    List<ElementModel> SingleFilterPipes = new List<ElementModel>();
                     SingleFilterPipes = FilterSingleUC(userControl.SystemTypeTextBox, userControl.SizeFromTextBox, userControl.SizeToTextBox, userControl.CommentsTextBox);
 
                     foreach (var element in SingleFilterPipes)

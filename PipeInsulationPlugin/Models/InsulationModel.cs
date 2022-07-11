@@ -19,7 +19,7 @@ namespace PipeInsulationPlugin
             InsulationName = name;
         }
 
-        public static void CreatePipeInsulation(Document doc, List<PipeModel> filteredPipes, ComboBox InsulationTypeCombobox, TextBox InsulationThicknessTextBox)
+        public static void CreatePipeInsulation(Document doc, List<ElementModel> filteredPipes, ComboBox InsulationTypeCombobox, TextBox InsulationThicknessTextBox)
         {
             HelperFunctionalClass.DeleteInsulationForFilteredPipes(doc, filteredPipes);
 

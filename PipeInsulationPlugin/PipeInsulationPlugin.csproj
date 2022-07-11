@@ -55,8 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Models\ElementModel.cs" />
     <Compile Include="Models\HelperFunctionalClass.cs" />
     <Compile Include="Models\InsulationModel.cs" />
+    <Compile Include="Models\PipeFittingModel.cs" />
     <Compile Include="Models\PipeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

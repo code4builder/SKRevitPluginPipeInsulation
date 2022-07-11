@@ -13,18 +13,20 @@ namespace PipeInsulationPlugin.Views
     public partial class UserWindowPipes : Window
     {
         List<PipeModel> pipesWithParams;
-        List<PipeModel> allFilteredPipes;
+        List<ElementModel> allFilteredPipes;
         List<InsulationModel> insulationWithParameters;
+        List<PipeFittingModel> pipesFittingsWithParameters;
         Document doc;
 
-        public UserWindowPipes(Document document, List<PipeModel> pipes, List<InsulationModel> insulations, List<PipeModel> filteredPipes)
+        public UserWindowPipes(Document document, List<PipeModel> pipes, 
+            List<InsulationModel> insulations, List<PipeFittingModel> pipesFittings)
         {
             InitializeComponent();
 
             doc = document;
             pipesWithParams = pipes;
             PipesListView.ItemsSource = pipesWithParams;
-            allFilteredPipes = filteredPipes;
+            pipesFittingsWithParameters = pipesFittings;
             insulationWithParameters = insulations;
 
             string[] SortingComboBoxArray = { "Pipe Type", "Size", "System Classification", "System Type", "Insulation Type", "Insulation Thickness", "Comments" };
@@ -137,7 +139,7 @@ namespace PipeInsulationPlugin.Views
                     filteredPipesByComboBox.Add(item as PipeModel);
                 }
 
-                List<PipeModel> filteredPipesBySize = new List<PipeModel>();
+                List<ElementModel> filteredPipesBySize = new List<ElementModel>();
 
                 foreach (var pipe in filteredPipesByComboBox)
                 {
@@ -169,7 +171,7 @@ namespace PipeInsulationPlugin.Views
 
         private void BatchAddingInsulationBtn_Click(object sender, RoutedEventArgs e)
         {
-            AddInsulationView addInsulationView = new AddInsulationView(pipesWithParams, allFilteredPipes, insulationWithParameters, doc);
+            AddInsulationView addInsulationView = new AddInsulationView(pipesWithParams, pipesFittingsWithParameters, insulationWithParameters, doc);
             addInsulationView.Show();
         }
 
