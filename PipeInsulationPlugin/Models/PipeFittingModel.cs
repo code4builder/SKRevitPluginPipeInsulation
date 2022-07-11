@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 
-namespace PipeInsulationPlugin
+namespace SKRevitPluginPipeInsulation
 {
     public class PipeFittingModel : ElementModel
     {

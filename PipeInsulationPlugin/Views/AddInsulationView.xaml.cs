@@ -1,14 +1,14 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Plumbing;
 using Microsoft.Win32;
-using PipeInsulationPlugin.Views.UserControls;
+using SKRevitPluginPipeInsulation.Views.UserControls;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PipeInsulationPlugin.Views
+namespace SKRevitPluginPipeInsulation.Views
 {
     /// <summary>
     /// Interaction logic for AddInsulationView.xaml
@@ -37,7 +37,7 @@ namespace PipeInsulationPlugin.Views
 
             insulationTypesList = HelperFunctionalClass.GetInsulationTypes(doc);
 
-            Filter1UC.InsulationTypeCombobox.ItemsSource = PipeInsulationPlugin.HelperFunctionalClass.GetInsulationTypeNames(doc);
+            Filter1UC.InsulationTypeCombobox.ItemsSource = SKRevitPluginPipeInsulation.HelperFunctionalClass.GetInsulationTypeNames(doc);
 
             allFilterUserControls.Add(Filter1UC);
         }
@@ -90,7 +90,7 @@ namespace PipeInsulationPlugin.Views
             BatchAddingStackPanel.Children.Add(newFilter);
             allFilterUserControls.Add(newFilter);
 
-            newFilter.InsulationTypeCombobox.ItemsSource = PipeInsulationPlugin.HelperFunctionalClass.GetInsulationTypeNames(doc);
+            newFilter.InsulationTypeCombobox.ItemsSource = SKRevitPluginPipeInsulation.HelperFunctionalClass.GetInsulationTypeNames(doc);
 
             newFilter.Name = filterUCName;
 

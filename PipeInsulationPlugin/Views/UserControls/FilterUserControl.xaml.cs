@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace PipeInsulationPlugin.Views.UserControls
+namespace SKRevitPluginPipeInsulation.Views.UserControls
 {
     /// <summary>
     /// Interaction logic for FilterUserControl.xaml

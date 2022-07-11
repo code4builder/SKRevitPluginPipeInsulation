@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 
-namespace PipeInsulationPlugin.Views
+namespace SKRevitPluginPipeInsulation.Views
 {
     /// <summary>
     /// Interaction logic for UserWindowPipes.xaml

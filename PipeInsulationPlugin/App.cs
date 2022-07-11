@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Autodesk.Revit.UI;
+using System;
 using System.Reflection;
-
-using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
 using System.Windows.Media.Imaging;
 
-namespace PipeInsulationPlugin
+namespace SKRevitPluginPipeInsulation
 {
     class App : IExternalApplication
     {
@@ -31,11 +25,11 @@ namespace PipeInsulationPlugin
                 "Pipe Insulation",
                 "Pipe Insulation",
                 thisAssemblyPath,
-                "PipeInsulationPlugin.StartClassPlugin");
+                "SKRevitPluginPipeInsulation.StartClassPlugin");
 
             PushButton pb1 = ribbonPanel.AddItem(b1Data) as PushButton;
             pb1.ToolTip = "Add Pipe Insulation";
-            BitmapImage pb1Image = new BitmapImage(new Uri("pack://application:,,,/PipeInsulationPlugin;component/Resources/pipe_insulation_new.png"));
+            BitmapImage pb1Image = new BitmapImage(new Uri("pack://application:,,,/SKRevitPluginPipeInsulation;component/Resources/pipe_insulation_new.png"));
             pb1.LargeImage = pb1Image;
 
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;

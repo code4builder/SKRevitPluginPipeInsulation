@@ -1,10 +1,10 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using PipeInsulationPlugin.Views;
+using SKRevitPluginPipeInsulation.Views;
 using System.Collections.Generic;
 
-namespace PipeInsulationPlugin
+namespace SKRevitPluginPipeInsulation
 {
     [TransactionAttribute(TransactionMode.Manual)]
     [RegenerationAttribute(RegenerationOption.Manual)]

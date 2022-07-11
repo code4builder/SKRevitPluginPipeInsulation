@@ -1,6 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 
-namespace PipeInsulationPlugin
+namespace SKRevitPluginPipeInsulation
 {
     public class PipeModel : ElementModel
     {

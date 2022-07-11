@@ -2,10 +2,10 @@
 <RevitAddIns>
 	<AddIn Type="Application">
 		<Name>Pipe Insulation Plugin</Name>
-		<Assembly>PipeInsulationPlugin.dll</Assembly>
+		<Assembly>SKRevitPluginPipeInsulation.dll</Assembly>
 		<AddInId>604b1052-f742-4951-8576-c261d1993108</AddInId>
-		<FullClassName>PipeInsulationPlugin.App</FullClassName>
+		<FullClassName>SKRevitPluginPipeInsulation.App</FullClassName>
 		<VendorId>Sergey Kuleshov</VendorId>
-		<VendorDescription>sk@bim-s.it</VendorDescription>
+		<VendorDescription>code4builder@gmail.com</VendorDescription>
 	</AddIn>
 </RevitAddIns>
