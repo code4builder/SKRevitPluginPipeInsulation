@@ -3,14 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:SKRevitPluginPipeInsulation.Views"
         xmlns:uc="clr-namespace:SKRevitPluginPipeInsulation.Views.UserControls"
              mc:Ignorable="d"
              Width="650"
              d:DesignHeight="510" d:DesignWidth="515">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -31,7 +42,8 @@
                     Width="130"
                     Margin="5"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                    Style="{StaticResource MaterialDesignFlatDarkBgButton}"/>
             <Button x:Name="LoadFilters"
                     Content="Load Filters"
                     Click="LoadFilters_Click"
@@ -39,7 +51,8 @@
                     Width="130"
                     Margin="50, 5, 5, 5"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"/>
             <Button x:Name="SaveFilters"
                     Content="Save Filters"
                     Click="SaveFilters_Click"
@@ -47,7 +60,8 @@
                     Width="130"
                     Margin="5"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1">

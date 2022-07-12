@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:SKRevitPluginPipeInsulation"
              xmlns:uc="clr-namespace:SKRevitPluginPipeInsulation.Views.UserControls"
              mc:Ignorable="d" 
@@ -10,25 +11,22 @@
     <Window.Resources>
         <ResourceDictionary>
             <Style TargetType="ListViewItem">
-                <Style.Triggers>
-                    <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
-                        <Setter Property="Background" Value="White" />
-                    </Trigger>
-                    <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
-                        <Setter Property="Background" Value="LightGray" />
-                    </Trigger>
-                </Style.Triggers>
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             </Style>
-
             <DataTemplate x:Key="CenterAllignmentTemplate">
                 <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding PipeNominalSize}"/>
+                                   Text="{Binding PipeNominalSize}"/>
             </DataTemplate>
             <DataTemplate x:Key="CenterAllignmentTemplateForInsulationThickness">
                 <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding InsulationThickness}"/>
+                                   Text="{Binding InsulationThickness}"/>
             </DataTemplate>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -36,9 +34,27 @@
             <ColumnDefinition Width="800"/>
             <ColumnDefinition Width="600"/>
         </Grid.ColumnDefinitions>
-
-        <ListView x:Name="PipesListView" Margin="30" Grid.Row="0"
+        <ListView x:Name="PipesListView" 
+                  Style="{x:Null}" 
+                  Grid.Row="0"
+                  Margin="30" 
                   AlternationCount="2">
+            <ListView.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="ListViewItem">
+                        <Style.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                <Setter Property="Background" Value="White" />
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                <Setter Property="Background" Value="LightGray" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+
+                </ResourceDictionary>
+            </ListView.Resources>
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
@@ -48,7 +64,7 @@
                                                       Click="lvColumnHeader_Click"/>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="40" 
+                        <GridViewColumn 
                                         CellTemplate="{StaticResource CenterAllignmentTemplate}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Content="Size"
@@ -76,7 +92,7 @@
                         </GridViewColumn>
                         <GridViewColumn CellTemplate="{StaticResource CenterAllignmentTemplateForInsulationThickness}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Content="Insulation Thickness"
+                                <GridViewColumnHeader Content="Ins. Thickness"
                                                       Click="lvColumnHeader_Click"/>
                             </GridViewColumn.Header>
                         </GridViewColumn>
@@ -100,9 +116,9 @@
               Grid.Column="1"
               Margin="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="130"/>
+                <RowDefinition Height="160"/>
                 <RowDefinition Height="20"/>
-                <RowDefinition Height="290"/>
+                <RowDefinition Height="330"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.Resources>
@@ -113,7 +129,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="60"/>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="60"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*"/>
@@ -137,8 +153,7 @@
                             Content="Apply sorting"
                             Click="SortBtn_Click"
                             Grid.Row="2"
-                            Width="150"
-                            Height="20"
+                            Width="200"
                             Margin="25,3,0,0"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left"/>
@@ -146,10 +161,10 @@
                     <Label Content="Sort by secondary key" 
                            Margin="15,5,0,2"/>
                     <ComboBox Name="SortBySecondaryKeyComboBox" 
-                          SelectedIndex="1" 
-                          Width="250" 
-                          HorizontalAlignment="Left"
-                          Margin="15,0,0,0"/>
+                              SelectedIndex="1" 
+                              Width="250" 
+                              HorizontalAlignment="Left"
+                              Margin="15,0,0,0"/>
                 </StackPanel>
 
                 <Border Grid.Column="0" Grid.Row="0" 
@@ -210,7 +225,6 @@
                     <Label>contains</Label>
                     <TextBox x:Name="TextBoxForFilter"
                              Width="180"
-                             Height="25"
                              HorizontalAlignment="Left"
                              Margin="15,0,0,0"/>
                 </StackPanel>
@@ -250,14 +264,13 @@
                    Margin="15,1,0,1"/>
                     <TextBox x:Name="InsulationThicknessTextBox"
                              Width="250"
-                             Height="25"
                              HorizontalAlignment="Left"
                              Margin="15,0,0,0"/>
                 </StackPanel>
                 <Button x:Name="FilterBtn"
                         Content="Apply filter"
                         Grid.Column="0" Grid.Row="3"
-                        Width="150"
+                        Width="200"
                         Height="30"
                         Margin="25,0,0,0"
                         VerticalAlignment="Center"
@@ -267,7 +280,7 @@
                         Content="Add Insulation"
                         Click="AddInsulation_Click"
                         Grid.Column="0" Grid.Row="6"
-                        Width="150"
+                        Width="200"
                         Height="30"
                         Margin="25,0,0,0"
                         VerticalAlignment="Center"
@@ -308,22 +321,24 @@
                     <Button x:Name="BatchAddingInsulationBtn"
                             Content="Batch Adding Insulation"
                             Click="BatchAddingInsulationBtn_Click"
-                            Width="150"
+                            Width="200"
                             Height="30"
                             Margin="25,20,0,0"
                             VerticalAlignment="Top"
-                            HorizontalAlignment="Left"/>
+                            HorizontalAlignment="Left"
+                            Style="{StaticResource MaterialDesignFlatDarkBgButton}"/>
                     <Border Grid.Column="0" Grid.Row="0" 
                             BorderBrush="{StaticResource brushFilter}" BorderThickness="1,1,1,1"/>
 
                     <Button x:Name="RefreshListView"
                             Content="Refresh Pipe List"
                             Click="RefreshListView_Click"
-                            Width="150"
+                            Width="200"
                             Height="30"
                             Margin="25,0,0,20"
                             VerticalAlignment="Bottom"
-                            HorizontalAlignment="Left"/>
+                            HorizontalAlignment="Left"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"/>
                 <Button x:Name="YouTubeLinkButton"
                             Click="YouTubeLinkButton_Click"
                             ToolTip="Watch YouTube Video Guide"
@@ -331,9 +346,10 @@
                             Height="30"
                             Margin="25,0,80,20"
                             VerticalAlignment="Bottom"
-                            HorizontalAlignment="Right">
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource MaterialDesignOutlinedButton}">
                     <Button.Content>
-                        <Label Content="YouTubeLink"/>
+                        <materialDesign:PackIcon Kind="Youtube"/>
                     </Button.Content>
                 </Button>
                 <Button x:Name="AboutButton"
@@ -342,20 +358,13 @@
                             Height="30"
                             Margin="25,0,25,20"
                             VerticalAlignment="Bottom"
-                            HorizontalAlignment="Right">
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource MaterialDesignOutlinedButton}">
                     <Button.Content>
-                        <Label Content="About"/>
+                        <materialDesign:PackIcon Kind="InformationOutline" />
                     </Button.Content>
                 </Button>
             </Grid>
-
-
-
-
-
-
-
-
         </Grid>
     </Grid>
 </Window>

@@ -11,8 +11,6 @@ namespace SKRevitPluginPipeInsulation.Views.UserControls
         public FilterUserControl()
         {
             InitializeComponent();
-
         }
-        
     }
 }

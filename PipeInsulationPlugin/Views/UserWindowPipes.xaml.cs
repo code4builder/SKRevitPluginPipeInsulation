@@ -1,7 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 
@@ -172,6 +171,8 @@ namespace SKRevitPluginPipeInsulation.Views
         private void BatchAddingInsulationBtn_Click(object sender, RoutedEventArgs e)
         {
             AddInsulationView addInsulationView = new AddInsulationView(pipesWithParams, pipesFittingsWithParameters, insulationWithParameters, doc);
+            addInsulationView.Owner = this;
+            addInsulationView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             addInsulationView.Show();
         }
 
@@ -189,7 +190,7 @@ namespace SKRevitPluginPipeInsulation.Views
         private void AboutButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Revit Plugin - Pipe Insulation \n \nVersion 1.0.0" +
-                "\n \nDeveloped by Sergey Kuleshov \n \nEmail: sk@bim-s.it");
+                "\n \nDeveloped by Sergey Kuleshov \n \nEmail: code4builder@google.com");
         }
     }
 }

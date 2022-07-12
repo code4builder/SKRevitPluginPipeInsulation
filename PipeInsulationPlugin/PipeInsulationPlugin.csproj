@@ -78,8 +78,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\MaterialDesignColors.dll" />
-    <None Include="bin\Debug\MaterialDesignThemes.Wpf.dll" />
+    <Resource Include="bin\Debug\MaterialDesignColors.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="bin\Debug\MaterialDesignThemes.Wpf.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\pipe_insulation_new.png" />
     <Content Include="SKRevitPluginPipeInsulation.addin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -106,6 +110,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Costura.Fody">
+      <Version>5.7.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="MaterialDesignColors">
       <Version>2.0.6</Version>
     </PackageReference>
@@ -114,4 +123,7 @@
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>Copy "$(TargetDir)SKRevitPluginPipeInsulation.dll" "$(ProgramData)\Autodesk\Revit\Addins\2020"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
