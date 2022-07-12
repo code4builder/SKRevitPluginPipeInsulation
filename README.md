@@ -13,5 +13,9 @@ For Revit versions 2019-2020 is used .NET Framework 4.7<br />
 For Revit versions 2021-2022 is used .NET Framework 4.8<br />
 For user interface was used WPF (Windows Presentation Foundation) with Material Design libraries for better style.
 
+## Screenshots
+
+## Link to video
+
 ## License
 This Plugin is licensed under the terms of the MIT License. Please see the LICENSE file for full details.
