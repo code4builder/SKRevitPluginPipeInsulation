@@ -9,7 +9,7 @@ The Add-in for Revit is compatible with the latest versions of Windows 8.1 and W
 
 ## Technologies
 The Plugin is developed in Visual Studio 2019.<br />
-For Revit is used .NET Framework 4.8<br />
+Based on .NET Framework 4.8.<br />
 For user interface was used WPF (Windows Presentation Foundation) with Material Design libraries for better style.
 
 ## Screenshots
