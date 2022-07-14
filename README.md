@@ -13,6 +13,8 @@ Based on .NET Framework 4.8.<br />
 For user interface was used WPF (Windows Presentation Foundation) with Material Design libraries for better style.
 
 ## Screenshots
+![Screenshot1](/../dev/Screenshots/SKRevitPluginPipeInsulation-screenshot_01.JPG)
+![Screenshot2](/../dev/Screenshots/SKRevitPluginPipeInsulation-screenshot_02.JPG)
 
 ## Link to video
 
