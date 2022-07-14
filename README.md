@@ -5,12 +5,11 @@ Once installed you can visualize sort and filter pipes by pipe type, system, siz
 Also this plugin can use many filters with rules that can be saved in an external file for later reuse<br />
 
 ## Prerequisits
-The Add-in for Revit is compatible with the latest versions of Windows 8.1 and Windows 10, running Revit Versions 2019-2021.
+The Add-in for Revit is compatible with the latest versions of Windows 8.1 and Windows 10, running Revit Versions 2019-2022.
 
 ## Technologies
 The Plugin is developed in Visual Studio 2019.<br />
-For Revit versions 2019-2020 is used .NET Framework 4.7<br />
-For Revit versions 2021-2022 is used .NET Framework 4.8<br />
+For Revit is used .NET Framework 4.8<br />
 For user interface was used WPF (Windows Presentation Foundation) with Material Design libraries for better style.
 
 ## Screenshots
