@@ -154,17 +154,24 @@ namespace SKRevitPluginPipeInsulation.Views
 
         private void AddInsulation_Click(object sender, RoutedEventArgs e)
         {
-            if (allFilteredPipes.Count != 0 && InsulationThicknessTextBox.Text != "")
+            bool isValidThicknessValue = double.TryParse(InsulationThicknessTextBox.Text.ToString(), out double insulationThickness);
+
+            if (allFilteredPipes.Count != 0 && InsulationThicknessTextBox.Text != "" && isValidThicknessValue)
             {
-                InsulationModel.CreatePipeInsulation(doc, allFilteredPipes, InsulationTypeComboBox, InsulationThicknessTextBox);
+
+                HelperFunctionalClass.DeleteInsulationForFilteredPipes(doc, allFilteredPipes);
+
+                HelperFunctionalClass.CreatePipeInsulation(doc, allFilteredPipes, InsulationTypeComboBox, insulationThickness);
+
+                MessageBox.Show($"Insulation added successfully for {allFilteredPipes.Count} elements");
             }
             else if (allFilteredPipes.Count == 0)
             {
-                MessageBox.Show("Please add filter");
+                MessageBox.Show("Please press 'Apply filter'");
             }
-            else if (InsulationThicknessTextBox.Text == "")
+            else if (InsulationThicknessTextBox.Text == "" || isValidThicknessValue == false)
             {
-                MessageBox.Show("Please add insulation thickness");
+                MessageBox.Show("Please add valid insulation thickness value");
             }
         }
 
@@ -184,12 +191,12 @@ namespace SKRevitPluginPipeInsulation.Views
 
         private void YouTubeLinkButton_Click(object sender, RoutedEventArgs e)
         {
-
+            System.Diagnostics.Process.Start("https://www.youtube.com/watch?v=YSp0Qqtyfh0");
         }
 
         private void AboutButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Revit Plugin - Pipe Insulation \n \nVersion 1.0.0" +
+            MessageBox.Show("Revit Plugin - Pipe Insulation \n \nVersion 1.1.0" +
                 "\n \nDeveloped by Sergey Kuleshov \n \nEmail: code4builder@google.com");
         }
     }

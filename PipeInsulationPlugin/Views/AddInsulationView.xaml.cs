@@ -32,7 +32,7 @@ namespace SKRevitPluginPipeInsulation.Views
             allPipeFittings = pipeFittings;
             insulationWithParameters = insulations;
             doc = document;
-            
+
             allPipesAndFittings = allPipes.Cast<ElementModel>().Concat(allPipeFittings.Cast<ElementModel>()).ToList();
 
             insulationTypesList = HelperFunctionalClass.GetInsulationTypes(doc);
@@ -42,7 +42,7 @@ namespace SKRevitPluginPipeInsulation.Views
             allFilterUserControls.Add(Filter1UC);
         }
 
-        private List<ElementModel> FilterSingleUC(TextBox SystemTypeTB, TextBox sizeFromTB, TextBox sizeToTB, TextBox CommentsTB)
+        private List<ElementModel> FilterSingleUC(TextBox SystemTypeTB, TextBox sizeFromTB, TextBox sizeToTB, TextBox CommentsTB, CheckBox CommentsCheckBox)
         {
             SingleFilterPipesList.Clear();
 
@@ -51,7 +51,7 @@ namespace SKRevitPluginPipeInsulation.Views
 
             foreach (var pipe in allPipesAndFittings)
             {
-                if (CommentsTB.Text != "")
+                if (CommentsTB.Text != "" && CommentsCheckBox.IsChecked == true)
                 {
                     if (pipe.Comments != null)
                     {
@@ -64,11 +64,26 @@ namespace SKRevitPluginPipeInsulation.Views
                         }
                     }
                 }
-                else if (pipe.SystemType.ToString().ToLower().Contains(SystemTypeTB.Text.ToString().ToLower())
+
+                else if(CommentsTB.Text == "" && CommentsCheckBox.IsChecked == true)
+                {
+                    if (pipe.SystemType.ToString().ToLower().Contains(SystemTypeTB.Text.ToString().ToLower())
+                        && pipe.PipeNominalSize >= sizeFrom
+                        && pipe.PipeNominalSize <= sizeTo
+                        && pipe.Comments == null)
+                    {
+                        SingleFilterPipesList.Add(pipe);
+                    }
+                }
+
+                else if (CommentsCheckBox.IsChecked == false)
+                {
+                    if (pipe.SystemType.ToString().ToLower().Contains(SystemTypeTB.Text.ToString().ToLower())
                         && pipe.PipeNominalSize >= sizeFrom
                         && pipe.PipeNominalSize <= sizeTo)
-                {
-                    SingleFilterPipesList.Add(pipe);
+                    {
+                        SingleFilterPipesList.Add(pipe);
+                    }
                 }
             }
 
@@ -105,39 +120,34 @@ namespace SKRevitPluginPipeInsulation.Views
 
         private void BatchAddInsulationButton_Click(object sender, RoutedEventArgs e)
         {
-            allFilteredPipes.Clear();
+            int totalInsulatedElements = 0;
 
             foreach (FilterUserControl userControl in allFilterUserControls)
             {
-                allFilteredPipes.AddRange(FilterSingleUC(userControl.SystemTypeTextBox, userControl.SizeFromTextBox, userControl.SizeToTextBox, userControl.CommentsTextBox));
-            }
+                bool isValidThicknessValue = double.TryParse(userControl.InsulationThicknessTextBox.Text.ToString(), out double insulationThickness);
 
-            HelperFunctionalClass.DeleteInsulationForFilteredPipes(doc, allFilteredPipes);
+                List<ElementModel> SingleFilterPipes = new List<ElementModel>();
+                SingleFilterPipes = FilterSingleUC(userControl.SystemTypeTextBox, userControl.SizeFromTextBox, userControl.SizeToTextBox, userControl.CommentsTextBox, userControl.CommentsCheckBox);
 
-            foreach (FilterUserControl userControl in allFilterUserControls)
-            {
-                using (Transaction t = new Transaction(doc))
+                if (isValidThicknessValue)
                 {
-                    t.Start("BatchAddInsulation");
+                    HelperFunctionalClass.DeleteInsulationForFilteredPipes(doc, SingleFilterPipes);
 
-                    double insulationThickness = double.Parse(userControl.InsulationThicknessTextBox.Text.ToString());
-                    double insulationThicknessConversion = UnitUtils.ConvertToInternalUnits(insulationThickness, DisplayUnitType.DUT_METERS) / 1000;
+                    HelperFunctionalClass.CreatePipeInsulation(doc, SingleFilterPipes, userControl.InsulationTypeCombobox, insulationThickness);
 
-                    ElementId insulationTypeIdforSingleFilter = HelperFunctionalClass.GetInsulationTypeId(userControl.InsulationTypeCombobox, insulationTypesList);
-
-                    List<ElementModel> SingleFilterPipes = new List<ElementModel>();
-                    SingleFilterPipes = FilterSingleUC(userControl.SystemTypeTextBox, userControl.SizeFromTextBox, userControl.SizeToTextBox, userControl.CommentsTextBox);
-
-                    foreach (var element in SingleFilterPipes)
-                    {
-                        _ = PipeInsulation.Create(doc, element.Id, insulationTypeIdforSingleFilter, insulationThicknessConversion);
-                    }
-                    t.Commit();
+                    totalInsulatedElements += SingleFilterPipes.Count;
+                }
+                else if (SingleFilterPipes.Count == 0)
+                {
+                    MessageBox.Show("Please press add filter'");
+                }
+                else if (userControl.InsulationThicknessTextBox.Text == "" || isValidThicknessValue == false)
+                {
+                    MessageBox.Show("Please add valid insulation thickness value");
                 }
             }
 
-            MessageBox.Show("Insulation added successfully");
-
+            MessageBox.Show($"Insulation added successfully for {totalInsulatedElements} elements");
         }
 
         private void LoadFilters_Click(object sender, RoutedEventArgs e)
@@ -152,7 +162,7 @@ namespace SKRevitPluginPipeInsulation.Views
             var linesFromCSV = File.ReadAllLines(filePath).Select(a => a.Split(','));
 
             AddValuesToFilterUC(linesFromCSV.ElementAt(0), Filter1UC);
-            List<string[]> linesListFromSecond =  linesFromCSV.ToList();
+            List<string[]> linesListFromSecond = linesFromCSV.ToList();
             linesListFromSecond.RemoveAt(0);
 
             foreach (var line in linesListFromSecond)
@@ -170,6 +180,7 @@ namespace SKRevitPluginPipeInsulation.Views
             filterUserControl.InsulationTypeCombobox.SelectedItem = line[3];
             filterUserControl.InsulationThicknessTextBox.Text = line[4];
             filterUserControl.CommentsTextBox.Text = line[5];
+            filterUserControl.CommentsCheckBox.IsChecked = bool.Parse(line[6]);
         }
 
         private void SaveFilters_Click(object sender, RoutedEventArgs e)
@@ -185,7 +196,8 @@ namespace SKRevitPluginPipeInsulation.Views
             foreach (FilterUserControl userControl in allFilterUserControls)
             {
                 string filterData = $"{userControl.SystemTypeTextBox.Text},{userControl.SizeFromTextBox.Text},{userControl.SizeToTextBox.Text}" +
-                    $",{userControl.InsulationTypeCombobox.Text},{userControl.InsulationThicknessTextBox.Text},{userControl.CommentsTextBox.Text}";
+                    $",{userControl.InsulationTypeCombobox.Text},{userControl.InsulationThicknessTextBox.Text},{userControl.CommentsTextBox.Text}," +
+                    $"{userControl.CommentsCheckBox.IsChecked.ToString()}";
                 allFiltersData.Add(filterData);
             }
 

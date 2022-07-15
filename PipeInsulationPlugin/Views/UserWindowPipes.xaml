@@ -6,7 +6,8 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:SKRevitPluginPipeInsulation"
              xmlns:uc="clr-namespace:SKRevitPluginPipeInsulation.Views.UserControls"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             Title="SK Tools - Pipe Insulation Plugin"
              d:DesignHeight="900" d:DesignWidth="1400">
     <Window.Resources>
         <ResourceDictionary>
@@ -37,7 +38,7 @@
         <ListView x:Name="PipesListView" 
                   Style="{x:Null}" 
                   Grid.Row="0"
-                  Margin="30" 
+                  Margin="4" 
                   AlternationCount="2">
             <ListView.Resources>
                 <ResourceDictionary>
@@ -65,7 +66,7 @@
                             </GridViewColumn.Header>
                         </GridViewColumn>
                         <GridViewColumn 
-                                        CellTemplate="{StaticResource CenterAllignmentTemplate}">
+                                       CellTemplate="{StaticResource CenterAllignmentTemplate}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Content="Size"
                                                       Click="lvColumnHeader_Click"/>
@@ -150,13 +151,20 @@
                               Margin="25,0,0,0"/>
                 </StackPanel>
                 <Button x:Name="SortBtn"
-                            Content="Apply sorting"
                             Click="SortBtn_Click"
                             Grid.Row="2"
                             Width="200"
                             Margin="25,3,0,0"
                             VerticalAlignment="Top"
-                            HorizontalAlignment="Left"/>
+                            HorizontalAlignment="Left">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="SortAscending" />
+                            <TextBlock Text="Apply sorting"
+                                       Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
                 <StackPanel Grid.Column="1" Grid.Row="1">
                     <Label Content="Sort by secondary key" 
                            Margin="15,5,0,2"/>
@@ -268,23 +276,38 @@
                              Margin="15,0,0,0"/>
                 </StackPanel>
                 <Button x:Name="FilterBtn"
-                        Content="Apply filter"
                         Grid.Column="0" Grid.Row="3"
                         Width="200"
                         Height="30"
                         Margin="25,0,0,0"
                         VerticalAlignment="Center"
                         Click="FilterApplyBtn_Click"
-                        HorizontalAlignment="Left" />
+                        HorizontalAlignment="Left">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Filter"/>
+                            <TextBlock Text="Apply filter"
+                                       Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
                 <Button x:Name="AddInsulationBtn"
-                        Content="Add Insulation"
                         Click="AddInsulation_Click"
+                        ToolTip="Adding insulation on pipes"
                         Grid.Column="0" Grid.Row="6"
                         Width="200"
                         Height="30"
                         Margin="25,0,0,0"
                         VerticalAlignment="Center"
-                        HorizontalAlignment="Left" />
+                        HorizontalAlignment="Left">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Pipe"/>
+                            <TextBlock Text="Add Insulation"
+                                       Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
                 <Border Grid.Column="0" Grid.Row="0" 
                         BorderBrush="{StaticResource brushFilter}" BorderThickness="1,1,0,0"/>
                 <Border Grid.Column="1" Grid.Row="0" 
@@ -318,50 +341,77 @@
                 <Grid.Resources>
                     <SolidColorBrush x:Key="brushFilter" Color="LightGray"/>
                 </Grid.Resources>
-                    <Button x:Name="BatchAddingInsulationBtn"
-                            Content="Batch Adding Insulation"
+                <Button x:Name="BatchAddingInsulationBtn"
                             Click="BatchAddingInsulationBtn_Click"
-                            Width="200"
+                            ToolTip="Batch adding insulation on pipes and fittings"
+                            Width="230"
                             Height="30"
                             Margin="25,20,0,0"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left"
-                            Style="{StaticResource MaterialDesignFlatDarkBgButton}"/>
+                            Style="{StaticResource MaterialDesignFlatDarkBgButton}">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Pipe"/>
+                            <materialDesign:PackIcon Kind="Pipe"/>
+                            <TextBlock Text="Batch Adding Insulation"
+                                       Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
                     <Border Grid.Column="0" Grid.Row="0" 
                             BorderBrush="{StaticResource brushFilter}" BorderThickness="1,1,1,1"/>
 
-                    <Button x:Name="RefreshListView"
-                            Content="Refresh Pipe List"
+                <Button x:Name="RefreshListView"
                             Click="RefreshListView_Click"
                             Width="200"
                             Height="30"
                             Margin="25,0,0,20"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Left"
-                            Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                            Style="{StaticResource MaterialDesignOutlinedButton}">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh"/>
+                            <TextBlock Text="Refresh Pipe List"
+                                       Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
                 <Button x:Name="YouTubeLinkButton"
                             Click="YouTubeLinkButton_Click"
                             ToolTip="Watch YouTube Video Guide"
-                            Width="50"
+                            Width="110"
                             Height="30"
-                            Margin="25,0,80,20"
+                            Margin="25,0,140,20"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Right"
                             Style="{StaticResource MaterialDesignOutlinedButton}">
                     <Button.Content>
-                        <materialDesign:PackIcon Kind="Youtube"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/SKRevitPluginPipeInsulation;component/Resources/Logo-YouTube-300x160.png"
+                                   Width="25"/>
+                            <TextBlock Text="Tutorial" 
+                                       Margin="5,0,0,0"/>
+                            
+                        </StackPanel>
                     </Button.Content>
                 </Button>
                 <Button x:Name="AboutButton"
                             Click="AboutButton_Click"
-                            Width="50"
+                            Width="110"
                             Height="30"
                             Margin="25,0,25,20"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Right"
                             Style="{StaticResource MaterialDesignOutlinedButton}">
                     <Button.Content>
-                        <materialDesign:PackIcon Kind="InformationOutline" />
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="InformationOutline" 
+                                                     HorizontalAlignment="Center"/>
+                            <TextBlock Text="About" 
+                                       Margin="10,0,0,0"/>
+                        </StackPanel>
                     </Button.Content>
                 </Button>
             </Grid>

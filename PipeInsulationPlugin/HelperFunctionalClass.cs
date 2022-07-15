@@ -3,6 +3,7 @@ using Autodesk.Revit.DB.Plumbing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace SKRevitPluginPipeInsulation
@@ -183,6 +184,43 @@ namespace SKRevitPluginPipeInsulation
             return propertyForSorting;
         }
 
+        public static void CreatePipeInsulation(Document doc, List<ElementModel> filteredPipes, ComboBox InsulationTypeCombobox, double insulationThickness)
+        {
+
+#if Revit2019orRevit2020
+            UnitType unitType = UnitType.UT_PipeInsulationThickness;
+            Units units = doc.GetUnits();
+            FormatOptions formatOptions = units.GetFormatOptions(unitType);
+            DisplayUnitType unitTypeId = formatOptions.DisplayUnits;
+
+            double insulationThicknessInternalUnits = UnitUtils.ConvertToInternalUnits(insulationThickness, unitTypeId);
+#else
+            // Revit 2021+
+            ForgeTypeId forgeTypeId = SpecTypeId.PipeInsulationThickness;
+            Units units = doc.GetUnits();
+            FormatOptions formatOptions = units.GetFormatOptions(forgeTypeId);
+            var unitTypeId = formatOptions.GetUnitTypeId();
+
+            double insulationThicknessInternalUnits = UnitUtils.ConvertToInternalUnits(insulationThickness, unitTypeId);
+#endif
+
+            List<Element> insulationTypesList = new List<Element>();
+            insulationTypesList = HelperFunctionalClass.GetInsulationTypes(doc);
+
+            ElementId insulationTypeIdforSingleFilter = HelperFunctionalClass.GetInsulationTypeId(InsulationTypeCombobox, insulationTypesList);
+
+            using (Transaction t = new Transaction(doc))
+            {
+                t.Start("AddInsulation");
+
+                foreach (var element in filteredPipes)
+                {
+                    _ = PipeInsulation.Create(doc, element.Id, insulationTypeIdforSingleFilter, insulationThicknessInternalUnits);
+                }
+                t.Commit();
+            }
+        }
+
         public static void DeleteInsulationForFilteredPipes(Document doc, List<ElementModel> FilteredPipes)
         {
             using (Transaction t = new Transaction(doc))
@@ -192,7 +230,6 @@ namespace SKRevitPluginPipeInsulation
                 FilteredElementCollector allElementsCollectorForInsulation = new FilteredElementCollector(doc);
 
                 List<Element> allPipeInsulationElements = allElementsCollectorForInsulation.OfCategory(BuiltInCategory.OST_PipeInsulations).WhereElementIsNotElementType().ToList();
-
 
 
                 List<PipeInsulation> allPipeInsulation = new List<PipeInsulation>();
