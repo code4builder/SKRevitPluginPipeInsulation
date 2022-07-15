@@ -11,8 +11,16 @@ namespace SKRevitPluginPipeInsulation.Views.UserControls
         public FilterUserControl()
         {
             InitializeComponent();
-
         }
-        
+
+        private void CommentsCheckBox_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            
+        }
+
+        private void CommentsCheckBox_Unchecked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            
+        }
     }
 }

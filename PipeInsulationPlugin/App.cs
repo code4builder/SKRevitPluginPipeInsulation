@@ -31,8 +31,6 @@ namespace SKRevitPluginPipeInsulation
             pb1.ToolTip = "Add Pipe Insulation";
             BitmapImage pb1Image = new BitmapImage(new Uri("pack://application:,,,/SKRevitPluginPipeInsulation;component/Resources/pipe_insulation_new.png"));
             pb1.LargeImage = pb1Image;
-
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         public Result OnShutdown(UIControlledApplication application)
@@ -46,25 +44,6 @@ namespace SKRevitPluginPipeInsulation
             // call our method that will load up our toolbar
             AddRibbonPanel(application);
             return Result.Succeeded;
-        }
-
-        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            string assemblyName = args.RequestingAssembly.GetName().Name;
-            if (assemblyName == "YourAssemblyName")
-            {
-                string resourceName = "YourAssemblyName.Assemblies." + new AssemblyName(args.Name).Name + ".dll";
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-                {
-                    if (stream != null)
-                    {
-                        byte[] assemblyData = new byte[stream.Length];
-                        stream.Read(assemblyData, 0, assemblyData.Length);
-                        return Assembly.Load(assemblyData);
-                    }
-                }
-            }
-            return null;
         }
     }
 }

@@ -63,6 +63,16 @@ namespace SKRevitPluginPipeInsulation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Logo_YouTube_300x160 {
+            get {
+                object obj = ResourceManager.GetObject("Logo_YouTube_300x160", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap pipe_insulation_new {
             get {
                 object obj = ResourceManager.GetObject("pipe_insulation_new", resourceCulture);

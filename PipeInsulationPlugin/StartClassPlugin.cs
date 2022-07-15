@@ -20,6 +20,7 @@ namespace SKRevitPluginPipeInsulation
             List<Element> insulationTypes = HelperFunctionalClass.GetInsulationTypes(doc);
             UserWindowPipes userWindowPipes = new UserWindowPipes(doc, pipesWithParameters, insulationWithParameters, pipesFittingsWithParameters);
 
+            userWindowPipes.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             userWindowPipes.ShowDialog();
 
             return Result.Succeeded;

@@ -3,18 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:SKRevitPluginPipeInsulation.Views.UserControls"
              xmlns:startclass="clr-namespace:SKRevitPluginPipeInsulation"
              mc:Ignorable="d"
-             Width="505" Height="280"
-             d:DesignHeight="280" d:DesignWidth="505">
+             Width="505" Height="290"
+             d:DesignHeight="290" d:DesignWidth="505">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid Margin="2" HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="55"/>
             <RowDefinition Height="55"/>
@@ -24,11 +35,19 @@
             <SolidColorBrush x:Key="brushFilter" Color="LightGray"/>
         </Grid.Resources>
 
-        <Label x:Name="FilterNameLabel"
-               Content="FILTER 1" FontWeight="Heavy"
-               Grid.Column="0" Grid.Row="0"
-               Height="30"
-               Margin="25,5,5,5"/>
+        <materialDesign:Card 
+                      Background="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                      Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                      Width="200"
+                      Height="30"
+                      Padding="8"
+                      Grid.Column="0" Grid.Row="0"
+                      UniformCornerRadius="6">
+            <TextBlock x:Name="FilterNameLabel"
+                       Text="FILTER 1"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+        </materialDesign:Card>
 
         <Label Grid.Column="0" Grid.Row="1"
                Content="System Type contains"
@@ -38,7 +57,6 @@
         <TextBox Grid.Column="1" Grid.Row="1"
                  x:Name="SystemTypeTextBox" 
                  Width="200"
-                 Height="20"
                  VerticalAlignment="Center"/>
 
         <StackPanel Grid.Column="0" Grid.Row="2">
@@ -46,7 +64,6 @@
                    Margin="20,0,0,0"/>
             <TextBox x:Name="SizeFromTextBox" 
                      Width="200"
-                     Height="20"
                      Margin="0,0,0,0"/>
         </StackPanel>
 
@@ -55,21 +72,29 @@
                    Margin="20,0,0,0"/>
             <TextBox x:Name="SizeToTextBox" 
                      Width="200"
-                     Height="20"
                      Margin="0,0,0,0"/>
         </StackPanel>
 
-        <Label Grid.Column="0" Grid.Row="3"
-               Content="Comments contain"
-               Margin="20,0,0,0"
-               VerticalAlignment="Center"/>
+        <StackPanel Grid.Column="0" Grid.Row="3"
+                    Orientation="Horizontal">
+            <Label Content="Comments contain "
+                   Margin="20,0,0,0"
+                   VerticalAlignment="Center"/>
+            <CheckBox x:Name="CommentsCheckBox"
+                      Content="Enabled"
+                      Checked="CommentsCheckBox_Checked"
+                      Unchecked="CommentsCheckBox_Unchecked"
+                      IsChecked="True"
+                      ToolTip="Enable Comments filter"
+                      Margin="15,0,0,0"/>
+        </StackPanel>
 
         <TextBox Grid.Column="1" Grid.Row="3"
                  x:Name="CommentsTextBox" 
                  Width="200"
-                 Height="20"
-                 VerticalAlignment="Center"/>
-        
+                 VerticalAlignment="Center"
+                 Visibility="Visible"/>
+
         <StackPanel Grid.Column="0" Grid.Row="4">
             <Label Content="Apply Insulation for this filter"
                    Margin="20,0,0,0"
@@ -79,7 +104,6 @@
             <ComboBox x:Name="InsulationTypeCombobox"
                      SelectedIndex="0"
                      Width="200"
-                     Height="20"
                      Margin="0,0,0,0"/>
         </StackPanel>
 
@@ -88,7 +112,6 @@
                    Margin="20,26,0,0"/>
             <TextBox x:Name="InsulationThicknessTextBox" 
                      Width="200"
-                     Height="20"
                      Margin="0,0,0,0"/>
         </StackPanel>
 

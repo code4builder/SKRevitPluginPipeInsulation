@@ -3,51 +3,94 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:SKRevitPluginPipeInsulation.Views"
-        xmlns:uc="clr-namespace:SKRevitPluginPipeInsulation.Views.UserControls"
+             xmlns:uc="clr-namespace:SKRevitPluginPipeInsulation.Views.UserControls"
              mc:Ignorable="d"
              Width="650"
+             Title="Pipe Insulation - Batch Adding"
              d:DesignHeight="510" d:DesignWidth="515">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="AddFilterUC"
-                    Content="Add Filter"
                     ToolTip="Add one more filter panel"
                     Click="AddFilterUC_Click"
                     Width="130"
                     Margin="5"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FilterPlus"/>
+                        <TextBlock Text="Add Filter"
+                                   Margin="10,0,0,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
 
             <Button x:Name="BatchAddInsulationButton"
-                    Content="Add Insulation"
                     Click="BatchAddInsulationButton_Click"
                     ToolTip="Add insulation for all filters below"
-                    Width="130"
+                    Width="160"
                     Margin="5"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                    Style="{StaticResource MaterialDesignFlatDarkBgButton}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Pipe"/>
+                        <TextBlock Text="Add Insulation"
+                                   Margin="10,0,0,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
             <Button x:Name="LoadFilters"
-                    Content="Load Filters"
                     Click="LoadFilters_Click"
                     ToolTip="Load filters from external file"
                     Width="130"
-                    Margin="50, 5, 5, 5"
+                    Margin="40, 5, 5, 5"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                    Style="{StaticResource MaterialDesignOutlinedButton}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Download" />
+                        <TextBlock Text="Load Filters"
+                                   Margin="10,0,0,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
             <Button x:Name="SaveFilters"
-                    Content="Save Filters"
                     Click="SaveFilters_Click"
                     ToolTip="Save filters in external file"
                     Width="130"
                     Margin="5"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                    Style="{StaticResource MaterialDesignOutlinedButton}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSaveEdit" />
+                        <TextBlock Text="Save Filters"
+                                   Margin="10,0,0,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1">
