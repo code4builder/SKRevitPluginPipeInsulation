@@ -16,7 +16,8 @@ For user interface was used WPF (Windows Presentation Foundation) with Material 
 ![Screenshot1](/../dev/Screenshots/SKRevitPluginPipeInsulation-screenshot_01.JPG)
 ![Screenshot2](/../dev/Screenshots/SKRevitPluginPipeInsulation-screenshot_02.JPG)
 
-## Link to video
+## Video Tutorial
+Visit https://www.youtube.com/watch?v=YSp0Qqtyfh0
 
 ## License
 This Plugin is licensed under the terms of the MIT License. Please see the LICENSE file for full details.
