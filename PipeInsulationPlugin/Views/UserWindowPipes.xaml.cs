@@ -196,7 +196,7 @@ namespace SKRevitPluginPipeInsulation.Views
 
         private void AboutButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Revit Plugin - Pipe Insulation \n \nVersion 1.1.0" +
+            MessageBox.Show("Revit Plugin - Pipe Insulation \n \nVersion 1.2.0" +
                 "\n \nDeveloped by Sergey Kuleshov \n \nEmail: code4builder@google.com");
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.UI;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
@@ -11,11 +12,32 @@ namespace SKRevitPluginPipeInsulation
         static void AddRibbonPanel(UIControlledApplication application)
         {
             // Create a custom ribbon tab
-            String tabName = "SKTools";
-            application.CreateRibbonTab(tabName);
+            const string RIBBON_TAB = "SKTools";
+            const string RIBBON_PANEL = "Elements";
+            try
+            {
+                application.CreateRibbonTab(RIBBON_TAB);
+            }
+            catch (Exception) { } //tab already exists
 
-            // Add a new ribbon panel
-            RibbonPanel ribbonPanel = application.CreateRibbonPanel(tabName, "Tools");
+            // Get or create the ribbon panel
+            RibbonPanel ribbonPanel = null;
+            List<RibbonPanel> panels = application.GetRibbonPanels(RIBBON_TAB);
+
+            foreach (RibbonPanel panel in panels)
+            {
+                if (panel.Name == RIBBON_PANEL)
+                {
+                    ribbonPanel = panel;
+                    break;
+                }
+            }
+
+            //Create ribbon panel if you can't find it
+            if (ribbonPanel == null)
+            {
+                ribbonPanel = application.CreateRibbonPanel(RIBBON_TAB, RIBBON_PANEL);
+            }
 
             // Get dll assembly path
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
